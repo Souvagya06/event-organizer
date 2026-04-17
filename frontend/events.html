@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Events | Indigo Horizon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/style.css">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#ffb2b9",
+              "surface": "#010f20",
+              "primary-fixed": "#9795ff",
+              "surface-tint": "#a7a5ff",
+              "error-dim": "#d73357",
+              "secondary-dim": "#8a4cfc",
+              "primary-fixed-dim": "#8885ff",
+              "on-secondary-container": "#e1d0ff",
+              "surface-container-high": "#0b2038",
+              "on-error": "#490013",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#000000",
+              "on-primary-container": "#14007e",
+              "secondary": "#af88ff",
+              "on-tertiary-fixed-variant": "#4e5f72",
+              "tertiary-dim": "#c7d9ef",
+              "on-secondary-fixed": "#430097",
+              "surface-container-low": "#031428",
+              "on-primary-fixed-variant": "#1a0099",
+              "on-surface": "#d8e6ff",
+              "tertiary-fixed-dim": "#c7d9ef",
+              "on-secondary": "#2b0065",
+              "primary-container": "#9795ff",
+              "tertiary": "#eef4ff",
+              "on-tertiary-container": "#445568",
+              "primary-dim": "#645efb",
+              "outline": "#68768c",
+              "surface-bright": "#152d49",
+              "on-background": "#d8e6ff",
+              "primary": "#a7a5ff",
+              "tertiary-container": "#d5e7fe",
+              "on-secondary-fixed-variant": "#6514d6",
+              "outline-variant": "#3b495d",
+              "secondary-fixed-dim": "#d0b8ff",
+              "tertiary-fixed": "#d5e7fe",
+              "surface-variant": "#102740",
+              "on-primary": "#1c00a0",
+              "on-surface-variant": "#9dacc3",
+              "background": "#010f20",
+              "surface-container-highest": "#102740",
+              "on-tertiary-fixed": "#324355",
+              "inverse-surface": "#f8f9ff",
+              "secondary-fixed": "#dcc9ff",
+              "on-tertiary": "#4c5d70",
+              "surface-container": "#071a30",
+              "inverse-on-surface": "#48566a",
+              "error": "#ff6e84",
+              "error-container": "#a70138",
+              "surface-dim": "#010f20",
+              "secondary-container": "#6001d1",
+              "inverse-primary": "#4e45e4"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #010f20; color: #d8e6ff; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .glass-panel { background: rgba(16, 39, 64, 0.7); backdrop-filter: blur(20px); }
+  .primary-gradient { background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%); }
+  .cta-gradient { background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%); }
+
+  /* Category accent strip colors */
+  .accent-music    { border-left-color: #af88ff; }
+  .accent-tech     { border-left-color: #a7a5ff; }
+  .accent-art      { border-left-color: #7bd0ff; }
+  .accent-food     { border-left-color: #ff6e84; }
+  .accent-wellness { border-left-color: #6adf8e; }
+  .accent-business { border-left-color: #ffd166; }
+</style>
+</head>
+<body class="bg-surface text-on-surface">
+
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#010f20] flex justify-between items-center px-8 h-16">
+  <div class="flex items-center gap-12">
+    <span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#a7a5ff] border-b-2 border-[#645efb] pb-1" href="./events.html">Events</a>
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./create-event.html">Create Event</a>
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./my_events.html">My Events</a>
+    </div>
+  </div>
+  <div class="flex items-center gap-4">
+    <button onclick="logout()" class="cta-gradient px-5 py-2 rounded-lg font-['Inter'] font-medium tracking-tight text-sm text-on-primary active:scale-95 opacity-90 hover:opacity-100 transition-all">LOGOUT</button>
+  </div>
+</nav>
+
+<main class="pt-16 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
+
+  <!-- Editorial Header -->
+  <header class="mb-12 pt-8">
+    <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-4">Curated <span class="text-primary">Experiences</span></h1>
+    <p class="text-on-surface-variant max-w-2xl text-lg leading-relaxed">
+      Discover the pulse of the midnight city. From exclusive galas to underground symphonies, we orchestrate the events that define the horizon.
+    </p>
+  </header>
+
+  <!-- Search Bar only -->
+  <section class="mb-12">
+    <div class="relative max-w-2xl">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+      <input id="searchInput" class="w-full bg-surface-container-highest border-none rounded-lg py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary transition-all" placeholder="Search events, venues, or artists..." type="text" oninput="handleSearch(this.value)"/>
+    </div>
+  </section>
+
+  <!-- Featured Bento Grid -->
+  <section class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-16">
+    <!-- Large Featured Card -->
+    <div class="md:col-span-4 lg:col-span-4 group relative overflow-hidden rounded-xl bg-surface-container-high aspect-[16/9]">
+      <img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCFf5OdXkFYgv_KQLH-MG4WrazojSEmnF72zlsr_DfQnrHteAG68OI5mLGxZcs2Iz9XLuJrKJ9JDlFAI1cmNQKMQG0j1DPFP5z44i2V3VY4ZxnhhcroihxLhfv5sUZ2GJmTQp3QGzWu4sWS9CeOm511flWGJqjOXUyNDfOhVolh9Z-6uzGch-_QbbawCdHC9xey7DAl01skqTeubfyyhA9LRzrN2kg9KoJNSJ0GwLDdf5fwWZFylN1Gr7qkecsRRCwZuNEDJ-tCu4v" alt="Neon Symphony 2026"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+      <div class="absolute bottom-0 left-0 p-8 w-full">
+        <span class="inline-block px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-[10px] font-black uppercase tracking-widest mb-4">Featured</span>
+        <h2 class="text-4xl font-bold mb-2">Neon Symphony 2026</h2>
+        <p class="text-on-surface-variant mb-6 max-w-md">An immersive multi-sensory journey through sound and light featuring world-class visual conductors.</p>
+        <div class="flex items-center gap-6 flex-wrap">
+          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary">calendar_today</span><span class="text-xs font-medium">OCT 24, 2026</span></div>
+          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary">location_on</span><span class="text-xs font-medium">BISWA BANGLA CONVENTION CENTRE | INDIA</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Side Bento -->
+    <div class="md:col-span-2 lg:col-span-2 flex flex-col gap-6">
+      <div class="flex-1 bg-surface-container-high rounded-xl p-6 flex flex-col justify-center border-l-4 border-secondary">
+        <h3 class="text-xl font-bold mb-1">Midnight Jazz Collective</h3>
+        <p class="text-on-surface-variant text-sm mb-4">Underground vibes in a hidden rooftop lounge.</p>
+        <div class="text-secondary text-xs font-bold uppercase tracking-widest">Starts in 4 Hours</div>
+      </div>
+      <div class="flex-1 bg-surface-container-high rounded-xl p-6 relative overflow-hidden">
+        <img class="absolute inset-0 w-full h-full object-cover opacity-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLGhC0iJr0Je7hy2-TvKgxmIqCC664N5bFYsjitNkHIqB1rMLrZ6miQCHL6CTXqt_8VXiKG5ZrMag0BPtlbouFLF_AtmiRDfXAh4KL1hXxTYQ5iGYnqUB9LnfvjaH5jWGNDt6TlnJkoLrMqTbTmeI6iWTRCWEzDNDSXkQ9cDx7vLvWVeLUwE_iW3iU9tiZ8s_pkXlS3tMEKKdW_sGlrT8-bDgCrGz1BEpZav1IHkZt9qRFM61tkk5kKuIEvf8TE31YDAVacwGJKw6b" alt=""/>
+        <div class="relative z-10">
+          <h3 class="text-xl font-bold mb-1">Digital Ledger Expo</h3>
+          <p class="text-on-surface-variant text-sm">The future of event tech and networking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Schedule -->
+  <h3 class="text-xs font-black tracking-[0.2em] uppercase text-on-surface-variant mb-8 border-b border-outline-variant/15 pb-4">Upcoming Schedule</h3>
+
+  <!-- Cards Grid (paginated) -->
+  <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]"></div>
+
+  <!-- Pagination -->
+  <div class="mt-16 mb-8 flex justify-center items-center gap-4">
+    <button id="prevBtn" onclick="changePage(-1)" class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant hover:text-primary transition-all disabled:opacity-30">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <span id="pageLabel" class="text-sm font-bold px-4">1 / 4</span>
+    <button id="nextBtn" onclick="changePage(1)" class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant hover:text-primary transition-all">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#010f20] w-full border-t border-[#3b495d]/15 flex flex-col md:flex-row justify-between items-center px-12 py-8 gap-4">
+  <div class="flex flex-col md:items-start items-center gap-2">
+    <span class="text-lg font-black text-[#d8e6ff]">Indigo Horizon</span>
+    <span class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3]">© 2026 Indigo Horizon. The Midnight Conductor.</span>
+  </div>
+  <div class="flex gap-8">
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#privacy">Privacy Policy</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#terms">Terms of Service</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#faq">FAQ</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#support">Support</a>
+  </div>
+</footer>
+
+<script>
+  // ── STATE ─────────────────────────────────────────────────
+  let ALL_EVENTS = [];       // raw rows from DB — never mutated after fetch
+  let filteredEvents = [];   // display slice — rebuilt on search/fetch
+  let registeredIds = new Set(); // event IDs this user has already registered for
+
+  const CARDS_PER_PAGE = 3;
+  let currentPage = 1;
+
+  // ── SAFE NUMBER HELPER ────────────────────────────────────
+  // Turso can return BigInt, number, or string — coerce safely
+  function toInt(val) {
+    if (val === null || val === undefined) return 0;
+    return Number(val) || 0;
+  }
+
+  // ── FETCH REGISTERED IDs FOR CURRENT USER ────────────────
+  async function fetchRegisteredIds() {
+    const userEmail = localStorage.getItem("userEmail");
+    if (!userEmail) return;
+
+    try {
+      const res = await fetch(`/api/events/registered?email=${encodeURIComponent(userEmail)}`);
+      if (!res.ok) return;
+      const ids = await res.json();
+      // ids is an array of event_id values (numbers or BigInts from Turso)
+      registeredIds = new Set(ids.map(id => Number(id)));
+    } catch (err) {
+      console.error("Failed to fetch registered IDs:", err);
+    }
+  }
+
+  // ── FETCH ALL EVENTS FROM BACKEND ────────────────────────
+  async function fetchEvents() {
+    try {
+      const res = await fetch("/api/events");
+      const data = await res.json();
+
+      // Store raw DB rows — do NOT transform date/time here.
+      // Transformation happens only in renderPage() so re-fetching
+      // never double-appends the time field.
+      ALL_EVENTS = data;
+
+      applyFilter(document.getElementById("searchInput").value);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  }
+
+  // ── APPLY SEARCH FILTER ───────────────────────────────────
+  function applyFilter(query) {
+    const q = (query || "").toLowerCase().trim();
+
+    filteredEvents = q
+      ? ALL_EVENTS.filter(ev =>
+          ev.title.toLowerCase().includes(q) ||
+          ev.location.toLowerCase().includes(q) ||
+          (ev.category || "").toLowerCase().includes(q)
+        )
+      : [...ALL_EVENTS];
+
+    currentPage = 1;
+    renderPage();
+  }
+
+  // ── SEARCH handler ────────────────────────────────────────
+  function handleSearch(query) {
+    applyFilter(query);
+  }
+
+  // ── PAGINATION ────────────────────────────────────────────
+  function changePage(dir) {
+    const total = Math.ceil(filteredEvents.length / CARDS_PER_PAGE);
+    currentPage = Math.max(1, Math.min(total, currentPage + dir));
+    renderPage();
+  }
+
+  // ── PRICE LOGIC ───────────────────────────────────────────
+  function getPriceLabel(ev) {
+    if (ev.access_type === "free") return "Free Entry";
+    if (ev.access_type === "invite") return "Invite Only";
+    return ev.price && ev.price !== "0" ? "₹" + ev.price : "Free Entry";
+  }
+
+  // ── REGISTER EVENT ────────────────────────────────────────
+  async function registerEvent(id) {
+    const userEmail = localStorage.getItem("userEmail");
+
+    if (!userEmail) {
+      alert("Session expired. Please login again.");
+      window.location.href = "/index.html";
+      return;
+    }
+
+    // Disable button immediately to prevent double-clicks
+    const btn = document.getElementById(`reg-btn-${id}`);
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Registering…";
+    }
+
+    try {
+      const res = await fetch(`/api/events/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_email: userEmail, event_id: id })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Registration failed");
+        // Re-enable on failure
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Register";
+        }
+        return;
+      }
+
+      // ── Optimistic UI update ──────────────────────────────
+      // 1. Mark this event as registered locally
+      registeredIds.add(Number(id));
+
+      // 2. Increment seats_filled in ALL_EVENTS in-place
+      const evIdx = ALL_EVENTS.findIndex(e => Number(e.id) === Number(id));
+      if (evIdx !== -1) {
+        ALL_EVENTS[evIdx] = {
+          ...ALL_EVENTS[evIdx],
+          total_registered: toInt(ALL_EVENTS[evIdx].total_registered) + 1
+        };
+      }
+
+      // 3. Re-render so the card reflects the new count + "Registered" button
+      applyFilter(document.getElementById("searchInput").value);
+
+      // 4. Silently re-fetch from DB in the background to get the real count
+      fetch("/api/events")
+        .then(r => r.json())
+        .then(data => {
+          ALL_EVENTS = data;
+          applyFilter(document.getElementById("searchInput").value);
+        })
+        .catch(() => {}); // non-critical
+
+    } catch (err) {
+      console.error(err);
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Register";
+      }
+    }
+  }
+
+  // ── RENDER ────────────────────────────────────────────────
+  function renderPage() {
+    const grid = document.getElementById('cardsGrid');
+
+    const total = Math.ceil(filteredEvents.length / CARDS_PER_PAGE) || 1;
+    const start = (currentPage - 1) * CARDS_PER_PAGE;
+    const slice = filteredEvents.slice(start, start + CARDS_PER_PAGE);
+
+    document.getElementById('pageLabel').textContent = `${currentPage} / ${total}`;
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage === total;
+
+    if (slice.length === 0) {
+      grid.innerHTML = `<div class="col-span-3 py-24 text-center text-on-surface-variant">No events found.</div>`;
+      return;
+    }
+
+    grid.innerHTML = slice.map(ev => {
+      // FIX: use toInt() so Turso BigInt / string values are handled safely
+      const filled   = toInt(ev.total_registered);
+      const capacity = toInt(ev.capacity);
+
+      const pct      = capacity > 0 ? Math.min(100, Math.round((filled / capacity) * 100)) : 0;
+      const seatsLeft = capacity > 0 ? Math.max(0, capacity - filled) : null;
+
+      // FIX: build display date from raw fields — never from already-transformed data
+      const displayDate = `${ev.date}${ev.time ? " " + ev.time : ""}`;
+
+      // FIX: check registered state to show correct button
+      const alreadyRegistered = registeredIds.has(Number(ev.id));
+      const isFull = capacity > 0 && filled >= capacity;
+
+      let btnHtml;
+      if (alreadyRegistered) {
+        btnHtml = `<button disabled
+          class="w-full py-2 bg-surface-container-highest text-green-400 rounded font-semibold text-sm cursor-default border border-green-400/30">
+          ✓ Registered
+        </button>`;
+      } else if (isFull) {
+        btnHtml = `<button disabled
+          class="w-full py-2 bg-surface-container-highest text-on-surface-variant rounded font-semibold text-sm cursor-not-allowed opacity-50">
+          Sold Out
+        </button>`;
+      } else {
+        btnHtml = `<button id="reg-btn-${ev.id}" onclick="registerEvent(${ev.id})"
+          class="w-full py-2 bg-primary text-black rounded font-semibold text-sm active:scale-95 transition-transform">
+          Register
+        </button>`;
+      }
+
+      return `
+      <div class="group bg-surface-container-low rounded-xl overflow-hidden hover:bg-surface-container-high transition-all duration-300 flex flex-col border-l-4 border-primary">
+        <div class="p-6 flex flex-col flex-1">
+
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex-1 pr-3">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1 block">
+                ${ev.category || "Event"}
+              </span>
+              <h4 class="text-xl font-bold">${ev.title}</h4>
+            </div>
+            <span class="text-xs font-bold text-primary">
+              ${getPriceLabel(ev)}
+            </span>
+          </div>
+
+          <p class="text-on-surface-variant text-sm mb-5">
+            ${ev.description || ""}
+          </p>
+
+          <div class="space-y-2 mb-5 text-sm">
+            <div>📅 ${displayDate}</div>
+            <div>📍 ${ev.location}</div>
+          </div>
+
+          <!-- Capacity -->
+          <div class="mb-4">
+            <div class="flex justify-between text-xs mb-1">
+              <span>Capacity</span>
+              <span>${capacity > 0 ? `${filled} / ${capacity} registered` : "Unlimited"}</span>
+            </div>
+
+            ${capacity > 0 ? `
+            <div class="h-2 bg-gray-700 rounded overflow-hidden">
+              <div class="h-full rounded transition-all duration-500"
+                style="width:${pct}%; background: ${pct >= 90 ? '#ff6e84' : pct >= 60 ? '#ffd166' : '#a7a5ff'}">
+              </div>
+            </div>
+            <div class="text-xs mt-1 ${seatsLeft === 0 ? 'text-red-400' : seatsLeft <= 5 ? 'text-yellow-400' : 'text-green-400'}">
+              ${seatsLeft === 0 ? 'No seats left' : seatsLeft <= 5 ? `⚠ Only ${seatsLeft} seats left!` : `${seatsLeft} seats left`}
+            </div>
+            ` : `<div class="text-xs text-green-400 mt-1">Open registration</div>`}
+          </div>
+
+          ${btnHtml}
+
+        </div>
+      </div>
+      `;
+    }).join('');
+  }
+
+  // ── INIT ──────────────────────────────────────────────────
+  async function init() {
+    // Fetch registered IDs and all events in parallel
+    await Promise.all([fetchRegisteredIds(), fetchEvents()]);
+  }
+
+  init();
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = "./index.html";
+  }
+</script>
+</body>
+</html>

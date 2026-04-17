@@ -1,0 +1,11 @@
+.cta-gradient {
+  background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%);
+  color: #000;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cta-gradient:hover {
+  opacity: 1;
+  transform: scale(1.03);
+}

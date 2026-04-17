@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Event Details | Indigo Horizon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-error-container": "#ffb2b9", "surface": "#010f20", "primary-fixed": "#9795ff",
+          "surface-tint": "#a7a5ff", "error-dim": "#d73357", "secondary-dim": "#8a4cfc",
+          "primary-fixed-dim": "#8885ff", "on-secondary-container": "#e1d0ff",
+          "surface-container-high": "#0b2038", "on-error": "#490013", "on-primary-fixed": "#000000",
+          "surface-container-lowest": "#000000", "on-primary-container": "#14007e",
+          "secondary": "#af88ff", "on-tertiary-fixed-variant": "#4e5f72", "tertiary-dim": "#c7d9ef",
+          "on-secondary-fixed": "#430097", "surface-container-low": "#031428",
+          "on-primary-fixed-variant": "#1a0099", "on-surface": "#d8e6ff",
+          "tertiary-fixed-dim": "#c7d9ef", "on-secondary": "#2b0065", "primary-container": "#9795ff",
+          "tertiary": "#eef4ff", "on-tertiary-container": "#445568", "primary-dim": "#645efb",
+          "outline": "#68768c", "surface-bright": "#152d49", "on-background": "#d8e6ff",
+          "primary": "#a7a5ff", "tertiary-container": "#d5e7fe",
+          "on-secondary-fixed-variant": "#6514d6", "outline-variant": "#3b495d",
+          "secondary-fixed-dim": "#d0b8ff", "tertiary-fixed": "#d5e7fe",
+          "surface-variant": "#102740", "on-primary": "#1c00a0", "on-surface-variant": "#9dacc3",
+          "background": "#010f20", "surface-container-highest": "#102740",
+          "on-tertiary-fixed": "#324355", "inverse-surface": "#f8f9ff",
+          "secondary-fixed": "#dcc9ff", "on-tertiary": "#4c5d70", "surface-container": "#071a30",
+          "inverse-on-surface": "#48566a", "error": "#ff6e84", "error-container": "#a70138",
+          "surface-dim": "#010f20", "secondary-container": "#6001d1", "inverse-primary": "#4e45e4"
+        },
+        fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { font-family: 'Inter', sans-serif; }
+  .glass-panel { background: rgba(16, 39, 64, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .cta-gradient { background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%); }
+
+  /* Toast */
+  #toast {
+    position: fixed; top: 24px; left: 50%;
+    transform: translateX(-50%) translateY(-120px);
+    z-index: 9999; min-width: 300px; max-width: 440px;
+    padding: 14px 20px; border-radius: 12px;
+    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    opacity: 0; pointer-events: none;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  #toast.success { background: #0a2218; border: 1px solid #22c55e; color: #4ade80; }
+  #toast.error   { background: #220a0a; border: 1px solid #ef4444; color: #f87171; }
+</style>
+</head>
+<body class="bg-surface text-on-surface">
+
+<!-- Toast -->
+<div id="toast">
+  <span id="toastIcon" class="material-symbols-outlined" style="font-size:18px;flex-shrink:0"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#010f20] flex justify-between items-center px-8 h-16">
+  <div class="flex items-center gap-12">
+    <span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
+    <div class="hidden md:flex gap-8 items-center">
+    </div>
+  </div>
+  
+</nav>
+
+<main class="pt-16 max-w-7xl mx-auto">
+  <div class="px-8 pt-8 pb-4">
+    <a href="./events.html" class="group flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">
+      <span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      Back to Events
+    </a>
+  </div>
+  <div id="eventContent" class="px-6 md:px-8"></div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#010f20] w-full border-t border-[#3b495d]/15 flex flex-col md:flex-row justify-between items-center px-12 py-8 gap-4 mt-12">
+  <div class="flex flex-col md:items-start items-center gap-2">
+    <span class="text-lg font-black text-[#d8e6ff]">Indigo Horizon</span>
+    <span class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3]">© 2026 Indigo Horizon. The Midnight Conductor.</span>
+  </div>
+  <div class="flex gap-8">
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#privacy">Privacy Policy</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#terms">Terms of Service</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#faq">FAQ</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#support">Support</a>
+  </div>
+</footer>
+
+<script>
+const EVENTS = {
+  "featured": {
+    title: "Neon Symphony 2026", subtitle: "Signature Experience",
+    date: "Oct 24, 2026 • 8:00 PM EST", venue: "Biswa Bangla Convention Centre | India",
+    price: "Free Entry", category: "Music & Light",
+    image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1400&q=80",
+    capacity: 5000, filled: 4350,
+    description: `Indigo Horizon presents "Neon Symphony 2026" — the most anticipated audio-visual spectacle of the year. Featuring world-class DJs, holographic orchestras, and a custom-built laser array spanning the full dome ceiling, this is not a concert. It's a ceremony.
+
+    Attendees will move through four distinct sonic zones, each curated by a different resident conductor. The experience culminates in a synchronized 360° finale as the clock strikes midnight.`,
+    highlights: [
+      { icon: "graphic_eq", title: "4 Sonic Zones", desc: "Each zone curated by a world-class DJ" },
+      { icon: "light_mode", title: "Holographic Stage", desc: "Full-dome laser and projection array" },
+      { icon: "restaurant", title: "Catered Midnight Bar", desc: "Artisan cocktails and small plates" },
+      { icon: "camera", title: "Photo Pit Access", desc: "Available for premium ticket holders" }
+    ],
+    speakers: [
+      { name: "ADITYA", role: "Headliner", org: "Neon Cartel Records" },
+      { name: "SHILLUDULLAH", role: "Co-Headliner", org: "Subterranean Music" },
+      { name: "ARIN", role: "Opening Act", org: "Indigo Collective" }
+    ],
+    tags: ["Music", "Electronic", "India", "Featured"],
+    organizer: "Indigo Horizon Labs", orgRole: "Premier Event Curators"
+  },
+  "e1": {
+    title: "Artisanal Spirits Tasting", subtitle: "Food & Drink",
+    date: "Nov 12, 2026 • 7:00 PM", venue: "NKDA Ground | Kolkata | INDIA",
+    price: "From Rs. 150", category: "Food & Drink",
+    image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=1400&q=80",
+    capacity: 120, filled: 74,
+    description: `An intimate evening of hand-crafted spirits, guided pairings, and conversations with master distillers in a candlelit underground cellar.
+
+    Each guest will sample eight exclusive small-batch spirits — from aged rye whiskeys to botanical gins — accompanied by a curated tasting journal. Three master distillers will lead guided sessions and answer questions from the floor.`,
+    highlights: [
+      { icon: "liquor", title: "8 Exclusive Spirits", desc: "Small-batch, craft and aged selections" },
+      { icon: "menu_book", title: "Tasting Journal", desc: "Custom curated tasting notes included" },
+      { icon: "record_voice_over", title: "Master Distillers", desc: "Live Q&A with three industry legends" },
+      { icon: "restaurant", title: "Food Pairings", desc: "Chef-selected charcuterie and cheese" }
+    ],
+    speakers: [
+      { name: "Patrick Rowan", role: "Master Distiller", org: "The Copper House" },
+      { name: "Lena Voss", role: "Spirits Critic", org: "Sip & Society Magazine" },
+      { name: "Carlos Mejia", role: "Gin Artisan", org: "Botanical Reserve" }
+    ],
+    tags: ["Spirits", "Tasting", "Kolkata", "Intimate"],
+    organizer: "Copper Distillery Group", orgRole: "Culinary Experiences"
+  },
+  "e2": {
+    title: "Brutalist Design Summit", subtitle: "Architecture & Design",
+    date: "Nov 15, 2026 • 10:00 AM", venue: "Comfort Accommodation | NewTown | INDIA",
+    price: "Invite Only", category: "Architecture",
+    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=80",
+    capacity: 300, filled: 300,
+    description: `The world's foremost brutalist architects convene in NewTown to debate the revival of raw concrete aesthetics in the post-digital era.
+
+    This closed-door summit brings together 300 invited architects, urban planners, and design critics for two days of provocative talks, live studio critiques, and a walking tour of NewTown's most contested brutalist landmarks.`,
+    highlights: [
+      { icon: "domain", title: "Walking Tour", desc: "NewTown's brutalist landmarks, guided" },
+      { icon: "rate_review", title: "Studio Critiques", desc: "Live design critique sessions" },
+      { icon: "groups", title: "Invite-Only", desc: "Curated 300-person attendance" },
+      { icon: "architecture", title: "Panel Debates", desc: "Post-digital concrete revival discourse" }
+    ],
+    speakers: [
+      { name: "Prof. Bikram Pal", role: "Urban Theorist", org: "NewTown School of Architecture" },
+      { name: "Tech Kaju", role: "Architect", org: "Raw Form Studio" },
+      { name: "Bikram Pal", role: "Design Critic", org: "Form & Void Journal" }
+    ],
+    tags: ["Architecture", "Design", "NewTown", "Invite Only"],
+    organizer: "Comfort Accommodation", orgRole: "Architectural Discourse Forum"
+  },
+  "e3": {
+    title: "Street Photography Walk", subtitle: "Photography",
+    date: "Dec 01, 2026 • 8:00 PM", venue: "College Street | Kolkata | INDIA",
+    price: "Free Entry", category: "Photography",
+    image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1400&q=80",
+    capacity: 40, filled: 28,
+    description: `Explore College Street under neon lights with a curated group of street photographers. Discover unique perspectives in one of the world's most vibrant urban landscapes.
+
+    The walk covers four key zones of Kolkata — the crossing, the backstreets, the covered arcade, and the elevated rail line. Each zone is introduced by the lead photographer with a brief compositional brief.`,
+    highlights: [
+      { icon: "photo_camera", title: "4 Shooting Zones", desc: "From the crossing to the backstreets" },
+      { icon: "wb_incandescent", title: "Night Techniques", desc: "Low-light and long-exposure guidance" },
+      { icon: "group", title: "Small Group", desc: "Max 40 photographers for intimacy" },
+      { icon: "star", title: "Free to Join", desc: "No cost, just bring your camera" }
+    ],
+    speakers: [
+      { name: "Mr. Momo", role: "Lead Photographer", org: "Kolkata Streets Collective" },
+      { name: "Anindita Pal", role: "Guest Artist", org: "Neon Frame Studios" },
+      { name: "Anirban Mondal", role: "Photo Editor", org: "Frame Magazine" }
+    ],
+    tags: ["Photography", "Kolkata", "Free", "Night"],
+    organizer: "Kolkata Streets Collective", orgRole: "Street Photography Community"
+  },
+  "e4": {
+    title: "Midnight Jazz Collective", subtitle: "Music",
+    date: "Nov 20, 2026 • 11:00 PM", venue: "Rooftop Lounge | Mumbai | INDIA",
+    price: "From Rs. 45", category: "Music",
+    image: "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=1400&q=80",
+    capacity: 80, filled: 61,
+    description: `Late-night jazz sessions on a hidden rooftop. Expect improvisation, rare vinyl sets, and a crowd that truly listens.
+
+    Doors open at 10PM. The night begins with a vinyl set from the house selector, before the quartet takes the stage at midnight for two extended improvised sets under the open sky.`,
+    highlights: [
+      { icon: "music_note", title: "Live Quartet", desc: "Two extended improvised sets" },
+      { icon: "album", title: "Vinyl Pre-show", desc: "Rare jazz vinyl from 10–11PM" },
+      { icon: "roofing", title: "Open Rooftop", desc: "Hidden terrace above the city" },
+      { icon: "local_bar", title: "Bar Service", desc: "Craft cocktails and bourbon list" }
+    ],
+    speakers: [
+      { name: "Mr. J", role: "Lead Pianist", org: "Noir Quartet" },
+      { name: "Mr. Woojein", role: "Vocalist", org: "Free-form Jazz Collective" },
+      { name: "Mrs. Nobara", role: "Vinyl Selector", org: "The Crate Archive" }
+    ],
+    tags: ["Jazz", "Music", "Live", "Mumbai"],
+    organizer: "Rooftop Noir Collective", orgRole: "Underground Music Curators"
+  },
+  "e5": {
+    title: "Digital Ledger Expo", subtitle: "Technology",
+    date: "Nov 28, 2026 • 9:00 AM", venue: "Tech Pavilion | West Bengal | INDIA",
+    price: "From Rs. 120", category: "Technology",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80",
+    capacity: 600, filled: 490,
+    description: `The premier gathering for blockchain architects and Web3 infrastructure engineers — two days of deep technical talks, live demos, and roundtables.
+
+    The expo covers Layer 2 scaling, zero-knowledge proof implementations, decentralised identity, and the next generation of on-chain financial infrastructure. Workshop tracks run in parallel with the main stage.`,
+    highlights: [
+      { icon: "developer_mode", title: "Technical Talks", desc: "ZK proofs, L2 scaling & more" },
+      { icon: "build", title: "Live Demos", desc: "Real-time protocol demonstrations" },
+      { icon: "handshake", title: "Roundtables", desc: "Closed-door builder roundtables" },
+      { icon: "workspace_premium", title: "Workshop Tracks", desc: "Hands-on parallel workshops" }
+    ],
+    speakers: [
+      { name: "Dr. Anya Rao", role: "Protocol Architect", org: "ZeroBase Labs" },
+      { name: "Souvik Das", role: "L2 Lead", org: "Orbital Chain" },
+      { name: "Alex Any", role: "DID Researcher", org: "Identity.io" }
+    ],
+    tags: ["Blockchain", "Web3", "Tech", "West Bengal"],
+    organizer: "Digital Ledger Foundation", orgRole: "Web3 Infrastructure Forum"
+  },
+  "e6": {
+    title: "Aurora Wellness Retreat", subtitle: "Wellness",
+    date: "Dec 05, 2026 • 6:00 AM", venue: "CR Park | Delhi | INDIA",
+    price: "From Rs. 310", category: "Wellness",
+    image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1400&q=80",
+    capacity: 30, filled: 22,
+    description: `Three-day immersive wellness retreat. Guided meditation, cold-water therapy, and silent forest walks.
+
+    The programme begins each morning at 6AM with a guided sunrise meditation. Afternoons include cold-water immersion sessions, breathwork, and a silent 4-hour forest walk on day two.`,
+    highlights: [
+      { icon: "self_improvement", title: "Guided Meditation", desc: "Sunrise sessions" },
+      { icon: "pool", title: "Cold Water Therapy", desc: "Ice bath and immersion" },
+      { icon: "forest", title: "Silent Forest Walk", desc: "4-hour guided silent walk on day 2" },
+      { icon: "nights_stay", title: "Aurora Evenings", desc: "Free time for northern lights viewing" }
+    ],
+    speakers: [
+      { name: "Souvagya", role: "Lead Guide", org: "Nordic Mindfulness Institute" },
+      { name: "Supra Sharma", role: "Cold Therapy Specialist", org: "Fjord Health" },
+      { name: "Mr. Geon WOO", role: "Forest Therapist", org: "Skogluft Collective" }
+    ],
+    tags: ["Wellness", "Retreat", "Delhi", "Mindfulness"],
+    organizer: "Fjord Sanctuary Group", orgRole: "Wellbeing Experiences"
+  },
+  "e7": {
+    title: "Subterranean Rave: Void", subtitle: "Nightlife",
+    date: "Dec 10, 2026 • 10:00 PM", venue: "Salt Lake Sector II | Kolkata | INDIA",
+    price: "From Rs. 35", category: "Nightlife",
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1400&q=80",
+    capacity: 500, filled: 499,
+    description: `Deep techno and industrial bass. Expect immersive lighting rigs and a 20-hour journey into sound.
+
+    The sound system — a custom 40-speaker spatial array. Three rooms, three curators, one 20-hour session from 10PM to 6AM.`,
+    highlights: [
+      { icon: "speaker", title: "40-Speaker Array", desc: "Custom spatial audio" },
+      { icon: "explore", title: "3 Rooms", desc: "Techno, industrial, and ambient" },
+      { icon: "schedule", title: "20-Hour Session", desc: "10PM to 6AM non-stop" },
+      { icon: "lightbulb", title: "Immersive Lighting", desc: "Programmed rig, no strobes" }
+    ],
+    speakers: [
+      { name: "Mrs. Duars", role: "Headliner", org: "Void Recordings" },
+      { name: "Mrs. Sen", role: "Room 2 Curator", org: "Industrial Haus" },
+      { name: "Mrs. Roy", role: "Ambient Room", org: "Drift Collective" }
+    ],
+    tags: ["Techno", "Rave", "Nightlife", "Salt Lake"],
+    organizer: "Sector II Events", orgRole: "Underground Nightlife Curators"
+  },
+  "e8": {
+    title: "Horizon Venture Summit", subtitle: "Business",
+    date: "Dec 12, 2026 • 8:00 AM", venue: "Central Angan | Kolkata | INDIA",
+    price: "From Rs. 850", category: "Business",
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1400&q=80",
+    capacity: 200, filled: 180,
+    description: `Where founders meet investors. Pitch sessions, fireside chats with unicorn founders, and curated 1-on-1 meetings.
+
+    Day one: keynote-driven with fireside chats and open networking. Day two: structured 1-on-1 meetings, startup pitches to a panel of 15 VCs, and a closing dinner.`,
+    highlights: [
+      { icon: "trending_up", title: "VC Pitch Sessions", desc: "Live pitches to 15 top-tier VCs" },
+      { icon: "record_voice_over", title: "Fireside Chats", desc: "Unicorn founders on stage" },
+      { icon: "handshake", title: "1-on-1 Meetings", desc: "Curated investor-founder pairing" },
+      { icon: "dinner_dining", title: "Closing Dinner", desc: "Black-tie networking dinner" }
+    ],
+    speakers: [
+      { name: "Priya Sharma", role: "Founder", org: "NovaTech ($4B)" },
+      { name: "Ronit Mishra", role: "General Partner", org: "Eclipse Ventures" },
+      { name: "Sofia Mendes", role: "CTO & Co-founder", org: "Lattice AI" }
+    ],
+    tags: ["Startup", "VC", "Networking", "Kolkata"],
+    organizer: "Horizon Capital Group", orgRole: "Venture & Startup Ecosystem"
+  },
+  "e9": {
+    title: "Celestial Art Exhibition", subtitle: "Art",
+    date: "Dec 15, 2026 • 7:00 PM", venue: "Orbit Gallery | Mumbai | INDIA",
+    price: "From Rs. 25", category: "Art",
+    image: "https://images.unsplash.com/photo-1578301978018-3005759f48f7?w=1400&q=80",
+    capacity: 250, filled: 140,
+    description: `An immersive exhibition of digital and physical art inspired by deep-space imagery, dark matter theory, and the poetry of the cosmos.
+
+    Twelve international artists present works spanning large-format prints, generative code installations, and hand-sculpted celestial forms.`,
+    highlights: [
+      { icon: "palette", title: "12 Artists", desc: "International digital and physical works" },
+      { icon: "code", title: "Generative Installs", desc: "Live code-driven art pieces" },
+      { icon: "camera_indoor", title: "3-Week Run", desc: "Opening night + public access" },
+      { icon: "star", title: "Cosmos Theme", desc: "Dark matter, deep space, cosmos" }
+    ],
+    speakers: [
+      { name: "Bikram Luthi", role: "Lead Curator", org: "Orbit Gallery" },
+      { name: "Bikram Palui", role: "Generative Artist", org: "Void Systems" },
+      { name: "Solte Da", role: "Astrophysicist", org: "Observatory" }
+    ],
+    tags: ["Art", "Exhibition", "Mumbai", "Digital"],
+    organizer: "Orbit Gallery", orgRole: "Contemporary Art Curation"
+  },
+  "e10": {
+    title: "Neon Film Festival", subtitle: "Film",
+    date: "Dec 18, 2026 • 5:00 PM", venue: "Hiland Cinema | Baghajatin | Kolkata | INDIA",
+    price: "From Rs. 60", category: "Film",
+    image: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1400&q=80",
+    capacity: 400, filled: 210,
+    description: `Three nights of independent cinema celebrating dark aesthetics, nocturnal narratives, and neon-drenched visual storytelling from around the world.
+
+    The festival screens 18 films across three nights. A jury of five selects the Neon Palme award. Q&As follow every screening.`,
+    highlights: [
+      { icon: "movie", title: "18 Films", desc: "Features, shorts and experimental work" },
+      { icon: "emoji_events", title: "Neon Palme Award", desc: "Jury prize for best picture" },
+      { icon: "record_voice_over", title: "Director Q&As", desc: "Post-screening conversations" },
+      { icon: "nights_stay", title: "3 Nights", desc: "Dec 18, 19 and 20" }
+    ],
+    speakers: [
+      { name: "Shounak Mukherjee", role: "Festival Director", org: "Hiland Cinema" },
+      { name: "Sugata Nayak", role: "Jury President", org: "Independent Film Society" },
+      { name: "Rajat Dalal", role: "Cinematographer", org: "Dark Frame Films" }
+    ],
+    tags: ["Film", "Cinema", "Kolkata", "Independent"],
+    organizer: "Hiland Cinema Group", orgRole: "Independent Film Curation"
+  },
+  "e11": {
+    title: "Biomechanical Fashion Show", subtitle: "Fashion",
+    date: "Dec 20, 2026 • 8:00 PM", venue: "The Forge | Delhi | INDIA",
+    price: "Invite Only", category: "Fashion",
+    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1400&q=80",
+    capacity: 150, filled: 150,
+    description: `Where haute couture meets industrial engineering. Wearable tech, exoskeletal garments, and AI-generated textile designs on the runway.
+
+    Eight designers present collections that blur the boundary between fashion and machine. Attendance is strictly limited to 150 guests.`,
+    highlights: [
+      { icon: "checkroom", title: "8 Designers", desc: "Wearable tech and exoskeletal couture" },
+      { icon: "smart_toy", title: "AI Textiles", desc: "Machine-woven and AI-generated fabrics" },
+      { icon: "groups", title: "150 Guests Only", desc: "Strictly limited capacity" },
+      { icon: "precision_manufacturing", title: "Live Engineering", desc: "Mechanical garments on the runway" }
+    ],
+    speakers: [
+      { name: "Sushmita Roy", role: "Creative Director", org: "MECH/WEAR" },
+      { name: "Suchismita Basak", role: "Wearable Engineer", org: "ExoForm Studio" },
+      { name: "Mrs. Feku", role: "AI Textile Designer", org: "Thread.AI" }
+    ],
+    tags: ["Fashion", "Tech", "Delhi", "Invite Only"],
+    organizer: "The Forge Collective", orgRole: "Avant-garde Fashion Events"
+  },
+  "e12": {
+    title: "New Year's Eve: Indigo", subtitle: "Gala",
+    date: "Dec 31, 2026 • 9:00 PM", venue: "BackStage Club | Kolkata | INDIA",
+    price: "From Rs. 200", category: "Gala",
+    image: "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=1400&q=80",
+    capacity: 350, filled: 290,
+    description: `Ring in 2027 with a black-tie gala — live orchestra, Michelin-star dinner, and a midnight fireworks spectacular.
+
+    The Indigo NYE Gala is the flagship event of the year. Guests enjoy a seven-course dinner, live orchestra performance, champagne countdown, and a 12-minute bespoke fireworks display.`,
+    highlights: [
+      { icon: "restaurant", title: "7-Course Dinner", desc: "Michelin-star chef curated menu" },
+      { icon: "music_note", title: "Live Orchestra", desc: "Full 40-piece ensemble performance" },
+      { icon: "celebration", title: "Midnight Fireworks", desc: "12-minute bespoke display" },
+      { icon: "wine_bar", title: "Champagne Toast", desc: "Vintage Moët & Chandon countdown" }
+    ],
+    speakers: [
+      { name: "Chef Arjun Mehta", role: "Executive Chef", org: "SALT Restaurant" },
+      { name: "Orchestra Horizon", role: "Live Ensemble", org: "Philharmonic" },
+      { name: "Layla Al Rashid", role: "Event Host", org: "Indigo Horizon" }
+    ],
+    tags: ["Gala", "NYE", "Kolkata", "Black-tie"],
+    organizer: "Indigo Horizon Events", orgRole: "Flagship Gala Productions"
+  }
+};
+
+// ── Toast ──────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(message, type) {
+  const toast = document.getElementById("toast");
+  const icons = { success: "check_circle", error: "error" };
+  document.getElementById("toastMsg").textContent  = message;
+  document.getElementById("toastIcon").textContent = icons[type] || "check_circle";
+  toast.className = "show " + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.className = type; }, 3500);
+}
+
+const user = localStorage.getItem("ih_user");
+// ── Registration ───────────────────────────────────────────────────────────────
+function registerNow() {
+  const id = new URLSearchParams(window.location.search).get("id") || "featured";
+  const ev = EVENTS[id];
+  if (!ev) return;
+
+  // Already registered?
+  if (localStorage.getItem("ih_reg_" + user + "_" + id)) {
+    showToast("You have already registered for this event.", "error");
+    return;
+  }
+
+  // Sold out?
+  if (ev.filled >= ev.capacity) {
+    showToast("Sorry, this event is sold out.", "error");
+    return;
+  }
+
+  // Decrement seat
+  const key = "ih_filled_" + id;
+
+  // get existing filled value OR default
+  let filled = localStorage.getItem(key);
+filled = filled ? parseInt(filled) : ev.filled;
+
+// increment
+filled += 1;
+
+// store updated value
+localStorage.setItem(key, filled);
+
+// update object
+ev.filled = filled;
+
+// mark registered
+localStorage.setItem("ih_reg_" + user + "_" + id, "true");
+
+  // Live-update sidebar
+  const pct       = Math.round((ev.filled / ev.capacity) * 100);
+  const remaining = ev.capacity - ev.filled;
+
+  const bar = document.getElementById("capacityBar");
+  if (bar) bar.style.width = pct + "%";
+
+  const pctEl = document.getElementById("capacityPct");
+  if (pctEl) pctEl.textContent = pct + "% Filled";
+
+  const remEl = document.getElementById("remainingCount");
+  if (remEl) {
+    remEl.textContent = remaining === 0 ? "Sold Out" : remaining;
+    remEl.className   = "text-xl font-black " + (remaining === 0 ? "text-[#ff6e84]" : "text-secondary");
+  }
+
+  // Disable button
+  const btn = document.getElementById("registerBtn");
+  if (btn) {
+    btn.textContent   = "Registered ✓";
+    btn.disabled      = true;
+    btn.style.opacity = "0.65";
+    btn.style.cursor  = "not-allowed";
+  }
+
+  showToast("Successfully Registered! See you there 🎉", "success");
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────────
+function render() {
+  const id        = new URLSearchParams(window.location.search).get("id") || "featured";
+  const ev        = EVENTS[id] || EVENTS["featured"];
+  const pct       = Math.round((ev.filled / ev.capacity) * 100);
+  const remaining = ev.capacity - ev.filled;
+  const user = localStorage.getItem("ih_user");
+  const alreadyReg = !!localStorage.getItem("ih_reg_" + user + "_" + id);
+
+  document.title = ev.title + " | Indigo Horizon";
+
+  document.getElementById("eventContent").innerHTML = `
+    <section class="relative mb-12">
+      <div class="relative h-[420px] rounded-xl overflow-hidden shadow-2xl bg-surface-container-high">
+        <img src="${ev.image}" alt="${ev.title}" class="absolute inset-0 w-full h-full object-cover opacity-60" onerror="this.style.display='none'"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/50 to-transparent"></div>
+        <div class="absolute bottom-8 left-8 right-8 flex flex-col md:flex-row justify-between items-end gap-6">
+          <div class="max-w-2xl">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] uppercase tracking-widest font-bold mb-4">${ev.subtitle}</span>
+            <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-on-surface mb-3">${ev.title}</h1>
+            <p class="text-on-surface-variant text-base max-w-xl">${ev.description.split('\n')[0].trim()}</p>
+          </div>
+          <div class="glass-panel p-6 rounded-xl w-full md:w-72 border border-outline-variant/15 flex-shrink-0">
+            <div class="flex flex-col gap-4">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary">calendar_today</span>
+                <div>
+                  <p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Date & Time</p>
+                  <p class="text-sm font-medium">${ev.date}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary">location_on</span>
+                <div>
+                  <p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Venue</p>
+                  <p class="text-sm font-medium">${ev.venue}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-secondary">confirmation_number</span>
+                <div>
+                  <p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Pricing</p>
+                  <p class="text-sm font-medium text-secondary">${ev.price}</p>
+                </div>
+              </div>
+              <button
+                id="registerBtn"
+                onclick="registerNow()"
+                ${alreadyReg || remaining === 0 ? 'disabled style="opacity:0.65;cursor:not-allowed"' : ''}
+                class="w-full bg-gradient-to-br from-primary to-primary-dim text-on-primary py-3 rounded-lg font-bold tracking-tight active:scale-95 transition-all shadow-lg shadow-primary/20 mt-1">
+                ${alreadyReg ? 'Registered ✓' : (remaining === 0 ? 'Sold Out' : 'Register Now')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-24">
+      <div class="lg:col-span-8 space-y-12">
+        <div class="space-y-6">
+          <h2 class="text-2xl font-bold tracking-tight border-b border-outline-variant/10 pb-4">About the Event</h2>
+          <div class="space-y-4 text-on-surface-variant leading-relaxed">
+            ${ev.description.split('\n\n').map(p => `<p>${p.trim()}</p>`).join('')}
+          </div>
+        </div>
+        <div class="space-y-6">
+          <h2 class="text-2xl font-bold tracking-tight">Event Highlights</h2>
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${ev.highlights.map(h => `
+            <li class="flex items-start gap-3 p-4 bg-surface-container-low rounded-lg">
+              <span class="material-symbols-outlined text-secondary">${h.icon}</span>
+              <div><p class="font-bold text-on-surface">${h.title}</p><p class="text-sm text-on-surface-variant">${h.desc}</p></div>
+            </li>`).join('')}
+          </ul>
+        </div>
+        <div class="space-y-6">
+          <h2 class="text-2xl font-bold tracking-tight">Keynote Speakers</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            ${ev.speakers.map(s => `
+            <div class="bg-surface-container-high rounded-xl p-6">
+              <div class="w-12 h-12 rounded-full bg-primary-container/40 flex items-center justify-center mb-4">
+                <span class="material-symbols-outlined text-primary">person</span>
+              </div>
+              <p class="text-xs text-primary font-bold uppercase tracking-widest mb-1">${s.role}</p>
+              <h3 class="text-lg font-bold text-on-surface">${s.name}</h3>
+              <p class="text-sm text-on-surface-variant">${s.org}</p>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4 space-y-8">
+        <div class="bg-surface-container-low p-8 rounded-xl border border-outline-variant/10">
+          <h3 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant mb-6">Organizer</h3>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center">
+              <span class="material-symbols-outlined text-on-primary-container">layers</span>
+            </div>
+            <div>
+              <p class="font-bold text-on-surface">${ev.organizer}</p>
+              <p class="text-sm text-on-surface-variant">${ev.orgRole}</p>
+            </div>
+          </div>
+          <button class="w-full border border-outline-variant/30 hover:bg-surface-bright text-on-surface py-3 rounded-lg text-sm font-medium transition-all">Follow Organizer</button>
+        </div>
+
+        <div class="bg-surface-container-highest p-8 rounded-xl">
+          <h3 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant mb-6">Event Capacity</h3>
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-on-surface-variant">Registration Progress</span>
+                <span id="capacityPct" class="text-primary font-bold">${pct}% Filled</span>
+              </div>
+              <div class="h-2 w-full bg-surface-container-low rounded-full overflow-hidden">
+                <div id="capacityBar" class="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500" style="width:${pct}%"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-surface/50 p-4 rounded-lg">
+                <p class="text-[10px] uppercase font-bold text-on-surface-variant">Total Seats</p>
+                <p class="text-xl font-black">${ev.capacity.toLocaleString()}</p>
+              </div>
+              <div class="bg-surface/50 p-4 rounded-lg">
+                <p class="text-[10px] uppercase font-bold text-on-surface-variant">Remaining</p>
+                <p id="remainingCount" class="text-xl font-black ${remaining === 0 ? 'text-[#ff6e84]' : 'text-secondary'}">${remaining === 0 ? 'Sold Out' : remaining}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4">
+          <h3 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4">Tags</h3>
+          <div class="flex flex-wrap gap-2">
+            ${ev.tags.map(t => `<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium text-on-surface-variant hover:text-primary cursor-default transition-colors">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+render();
+</script>
+<script src="./js/auth-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Event | Indigo Horizon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/style.css">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-error-container": "#ffb2b9", "surface": "#010f20", "primary-fixed": "#9795ff",
+          "surface-tint": "#a7a5ff", "error-dim": "#d73357", "secondary-dim": "#8a4cfc",
+          "primary-fixed-dim": "#8885ff", "on-secondary-container": "#e1d0ff",
+          "surface-container-high": "#0b2038", "on-error": "#490013", "on-primary-fixed": "#000000",
+          "surface-container-lowest": "#000000", "on-primary-container": "#14007e",
+          "secondary": "#af88ff", "on-tertiary-fixed-variant": "#4e5f72", "tertiary-dim": "#c7d9ef",
+          "on-secondary-fixed": "#430097", "surface-container-low": "#031428",
+          "on-primary-fixed-variant": "#1a0099", "on-surface": "#d8e6ff",
+          "tertiary-fixed-dim": "#c7d9ef", "on-secondary": "#2b0065", "primary-container": "#9795ff",
+          "tertiary": "#eef4ff", "on-tertiary-container": "#445568", "primary-dim": "#645efb",
+          "outline": "#68768c", "surface-bright": "#152d49", "on-background": "#d8e6ff",
+          "primary": "#a7a5ff", "tertiary-container": "#d5e7fe",
+          "on-secondary-fixed-variant": "#6514d6", "outline-variant": "#3b495d",
+          "secondary-fixed-dim": "#d0b8ff", "tertiary-fixed": "#d5e7fe",
+          "surface-variant": "#102740", "on-primary": "#1c00a0", "on-surface-variant": "#9dacc3",
+          "background": "#010f20", "surface-container-highest": "#102740",
+          "on-tertiary-fixed": "#324355", "inverse-surface": "#f8f9ff",
+          "secondary-fixed": "#dcc9ff", "on-tertiary": "#4c5d70", "surface-container": "#071a30",
+          "inverse-on-surface": "#48566a", "error": "#ff6e84", "error-container": "#a70138",
+          "surface-dim": "#010f20", "secondary-container": "#6001d1", "inverse-primary": "#4e45e4"
+        },
+        fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .glass-panel { background: rgba(16, 39, 64, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .cta-gradient { background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%); }
+  .step-card.hidden-step { display: none; }
+  .toggle-track {
+    width: 48px; height: 26px; border-radius: 9999px;
+    background: #102740; border: 1px solid #3b495d;
+    position: relative; cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease; flex-shrink: 0;
+  }
+  .toggle-track.on { background: linear-gradient(135deg,#a7a5ff,#645efb); border-color: #a7a5ff; }
+  .toggle-thumb {
+    width: 18px; height: 18px; border-radius: 9999px; background: #68768c;
+    position: absolute; top: 3px; left: 3px;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), background 0.25s ease;
+  }
+  .toggle-track.on .toggle-thumb { transform: translateX(22px); background: white; }
+  #toast {
+    position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    z-index: 9999; min-width: 280px; max-width: 420px; padding: 14px 20px; border-radius: 12px;
+    font-family:'Inter',sans-serif; font-size:14px; font-weight:600;
+    display:flex; align-items:center; gap:10px;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+    opacity: 0; pointer-events: none;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  #toast.success { background:#0a2218; border:1px solid #22c55e; color:#4ade80; }
+  #toast.error   { background:#220a0a; border:1px solid #ef4444; color:#f87171; }
+  .review-row { display:flex; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid rgba(59,73,93,0.25); }
+  .review-row:last-child { border-bottom:none; }
+  @keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(167,165,255,0.5); }
+    70%  { box-shadow: 0 0 0 8px rgba(167,165,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(167,165,255,0); }
+  }
+  .step-active { animation: pulse-ring 1.8s ease infinite; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+
+<!-- Toast -->
+<div id="toast">
+  <span id="toastIcon" class="material-symbols-outlined" style="font-size:18px;flex-shrink:0"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- Navbar -->
+<nav class="fixed top-0 w-full z-50 bg-[#010f20] flex justify-between items-center px-8 h-16">
+  <div class="flex items-center gap-12">
+    <span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./events.html">Events</a>
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#a7a5ff] border-b-2 border-[#645efb] pb-1" href="./create-event.html">Create Event</a>
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./my_events.html">My Events</a>
+    </div>
+  </div>
+  <div class="flex items-center gap-4">
+    <button onclick="logout()" class="cta-gradient px-5 py-2 rounded-lg font-['Inter'] font-medium tracking-tight text-sm text-on-primary active:scale-95 opacity-90 hover:opacity-100 transition-all">LOGOUT</button>
+  </div>
+</nav>
+
+<main class="pt-16 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto pb-24">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+    <!-- Left sidebar -->
+    <div class="lg:col-span-5 flex flex-col justify-start pt-8">
+      <span class="text-primary font-bold tracking-widest uppercase text-xs mb-4">Orchestrate the Night</span>
+      <h1 class="text-5xl md:text-7xl font-black tracking-tighter text-on-surface leading-[0.9] mb-8">
+        CREATE<br/>YOUR<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">HORIZON.</span>
+      </h1>
+      <p class="text-on-surface-variant text-lg max-w-md leading-relaxed mb-12">
+        Enter the details for your upcoming event. Our midnight conductor engine will ensure every light, sound, and seat is accounted for in the digital ledger.
+      </p>
+      <div class="space-y-6 hidden lg:block">
+        <div class="flex items-center gap-4 transition-opacity duration-300" id="sideStep1">
+          <div id="dot1" class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold step-active">1</div>
+          <div><span class="text-sm font-bold text-on-surface block">Event Essentials</span><span class="text-xs text-on-surface-variant">Core details &amp; identity</span></div>
+        </div>
+        <div class="flex items-center gap-4 opacity-40 transition-opacity duration-300" id="sideStep2">
+          <div id="dot2" class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold">2</div>
+          <div><span class="text-sm font-bold text-on-surface block">Ticket Logistics</span><span class="text-xs text-on-surface-variant">Pricing &amp; tiers</span></div>
+        </div>
+        <div class="flex items-center gap-4 opacity-40 transition-opacity duration-300" id="sideStep3">
+          <div id="dot3" class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold">3</div>
+          <div><span class="text-sm font-bold text-on-surface block">Review &amp; Publish</span><span class="text-xs text-on-surface-variant">Final synchronization</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: step cards -->
+    <div class="lg:col-span-7 pt-8">
+
+      <!-- STEP 1 -->
+      <div id="step1" class="step-card space-y-8 glass-panel p-8 md:p-12 rounded-xl shadow-2xl">
+        <div><p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Step 1 of 3</p><h2 class="text-2xl font-black tracking-tight">Event Essentials</h2></div>
+        <div class="space-y-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Event Host Email ID</label>
+            <input id="f-email" type="email" placeholder="anirbanpaul@example.com" class="w-full bg-surface-container-highest border-none rounded-lg p-4 text-on-surface placeholder:text-outline focus:ring-0 focus:bg-surface-bright transition-all"/ reeadonly>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Event Title</label>
+            <input id="f-title" type="text" placeholder="The Midnight Gala 2026" class="w-full bg-surface-container-highest border-none rounded-lg p-4 text-on-surface placeholder:text-outline focus:ring-0 focus:bg-surface-bright transition-all"/>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Category</label>
+              <select id="f-category" class="w-full bg-surface-container-highest border-none rounded-lg p-4 text-on-surface focus:ring-0 focus:bg-surface-bright transition-all">
+                <option>Music &amp; Concerts</option><option>Corporate Summit</option>
+                <option>Art Exhibition</option><option>Nightlife &amp; Clubbing</option>
+                <option>Technology</option><option>Wellness</option>
+                <option>Food &amp; Drink</option><option>Fashion</option>
+                <option>Film</option><option>Business</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Location</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">location_on</span>
+                <input id="f-location" type="text" placeholder="Venue, City | India" class="w-full bg-surface-container-highest border-none rounded-lg py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 focus:bg-surface-bright transition-all"/>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Date</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">calendar_today</span>
+                <input id="f-date" type="date" class="w-full bg-surface-container-highest border-none rounded-lg py-4 pl-12 pr-4 text-on-surface focus:ring-0 focus:bg-surface-bright transition-all"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Time</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">schedule</span>
+                <input id="f-time" type="time" class="w-full bg-surface-container-highest border-none rounded-lg py-4 pl-12 pr-4 text-on-surface focus:ring-0 focus:bg-surface-bright transition-all"/>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Event Description</label>
+            <textarea id="f-desc" rows="5" placeholder="Describe the atmosphere, the lineup, and the experience..." class="w-full bg-surface-container-highest border-none rounded-lg p-4 text-on-surface placeholder:text-outline focus:ring-0 focus:bg-surface-bright transition-all resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Cover Image</label>
+            <div class="relative border-2 border-dashed border-outline-variant rounded-xl p-10 flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer hover:border-primary">
+              <span class="material-symbols-outlined text-4xl text-primary mb-3">upload_file</span>
+              <p id="fileLabel" class="text-on-surface font-medium text-sm">Click to upload or drag and drop</p>
+              <p class="text-on-surface-variant text-xs mt-1 uppercase tracking-widest">PNG, JPG, or WEBP (Max. 10MB)</p>
+              <input id="f-image" type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="updateFileLabel(this)"/>
+            </div>
+          </div>
+        </div>
+        <div class="pt-4 flex justify-end">
+          <button onclick="goToStep(2)" class="flex items-center gap-3 px-10 py-4 rounded-lg bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold text-base shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+            Next <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div id="step2" class="step-card hidden-step space-y-8 glass-panel p-8 md:p-12 rounded-xl shadow-2xl">
+        <div><p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Step 2 of 3</p><h2 class="text-2xl font-black tracking-tight">Ticket Logistics</h2></div>
+        <div class="space-y-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Ticket Price (₹)</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-base select-none">₹</span>
+              <input id="f-price" type="number" min="0" placeholder="0" oninput="onPriceInput(this.value)"
+                class="w-full bg-surface-container-highest border-none rounded-lg py-4 pl-10 pr-4 text-on-surface placeholder:text-outline focus:ring-0 focus:bg-surface-bright transition-all text-lg font-semibold"/>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-2">Enter 0 to automatically enable Free Entry.</p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Total Capacity (seats)</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">groups</span>
+              <input id="f-capacity" type="number" min="1" placeholder="100"
+                class="w-full bg-surface-container-highest border-none rounded-lg py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-0 focus:bg-surface-bright transition-all"/>
+            </div>
+          </div>
+          <div class="h-px bg-outline-variant/20 my-2"></div>
+          <div class="flex items-center justify-between p-5 bg-surface-container-highest rounded-xl hover:bg-surface-bright transition-colors">
+            <div>
+              <p class="font-bold text-on-surface text-sm">Free Entry</p>
+              <p class="text-xs text-on-surface-variant mt-0.5">No ticket purchase required. Open to all.</p>
+            </div>
+            <div class="toggle-track" id="toggleFree" onclick="toggleOption('free')">
+              <div class="toggle-thumb"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-5 bg-surface-container-highest rounded-xl hover:bg-surface-bright transition-colors">
+            <div>
+              <p class="font-bold text-on-surface text-sm">Invite Only</p>
+              <p class="text-xs text-on-surface-variant mt-0.5">Attendance restricted to invited guests only.</p>
+            </div>
+            <div class="toggle-track" id="toggleInvite" onclick="toggleOption('invite')">
+              <div class="toggle-thumb"></div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+            <span class="material-symbols-outlined text-primary text-base mt-0.5 flex-shrink-0">info</span>
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+              Free Entry and Invite Only are mutually exclusive — enabling one disables the other. If neither is on, the event will be listed as a standard paid event.
+            </p>
+          </div>
+        </div>
+        <div class="pt-4 flex justify-between items-center">
+          <button onclick="goToStep(1)" class="flex items-center gap-2 px-6 py-3 rounded-lg border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary font-medium text-sm transition-all">
+            <span class="material-symbols-outlined text-base">arrow_back</span> Back
+          </button>
+          <button onclick="goToStep(3)" class="flex items-center gap-3 px-10 py-4 rounded-lg bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold text-base shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+            Next <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div id="step3" class="step-card hidden-step space-y-8 glass-panel p-8 md:p-12 rounded-xl shadow-2xl">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Step 3 of 3</p>
+          <h2 class="text-2xl font-black tracking-tight">Review &amp; Publish</h2>
+          <p class="text-on-surface-variant text-sm mt-1">Check all details before launching your event.</p>
+        </div>
+        <div class="bg-surface-container-highest rounded-xl p-6">
+          <p class="text-xs font-black uppercase tracking-widest text-primary mb-4">Event Essentials</p>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Host Email</span><span id="rv-email" class="text-sm text-on-surface text-right break-all">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Title</span><span id="rv-title" class="text-sm text-on-surface font-semibold text-right">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Category</span><span id="rv-category" class="text-sm text-on-surface text-right">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Location</span><span id="rv-location" class="text-sm text-on-surface text-right">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Date</span><span id="rv-date" class="text-sm text-on-surface text-right">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Time</span><span id="rv-time" class="text-sm text-on-surface text-right">—</span></div>
+          <div class="pt-3"><p class="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Description</p><p id="rv-desc" class="text-sm text-on-surface-variant leading-relaxed">—</p></div>
+        </div>
+        <div class="bg-surface-container-highest rounded-xl p-6">
+          <p class="text-xs font-black uppercase tracking-widest text-secondary mb-4">Ticket Logistics</p>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Price</span><span id="rv-price" class="text-sm text-on-surface font-semibold text-right">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Capacity</span><span id="rv-capacity" class="text-sm text-on-surface text-right">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Access Type</span><span id="rv-access" class="text-sm font-bold text-right">—</span></div>
+          <div class="review-row"><span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold w-28 flex-shrink-0">Cover Image</span><span id="rv-image" class="text-sm text-on-surface text-right">—</span></div>
+        </div>
+        <div class="pt-4 flex justify-between items-center">
+          <button onclick="goToStep(2)" class="flex items-center gap-2 px-6 py-3 rounded-lg border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary font-medium text-sm transition-all">
+            <span class="material-symbols-outlined text-base">arrow_back</span> Back
+          </button>
+          <button type="button" onclick="launchEvent()" id="launchBtn" class="flex items-center gap-3 px-10 py-4 rounded-lg bg-gradient-to-br from-primary to-primary-dim text-on-primary font-bold text-base shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-base">rocket_launch</span> Launch Event
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div class="h-24 bg-gradient-to-b from-surface to-surface-container-low"></div>
+<footer class="bg-[#010f20] w-full border-t border-[#3b495d]/15 flex flex-col md:flex-row justify-between items-center px-12 py-8 gap-4">
+  <div class="flex flex-col md:items-start items-center gap-2">
+    <span class="text-lg font-black text-[#d8e6ff]">Indigo Horizon</span>
+    <span class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3]">© 2026 Indigo Horizon. The Midnight Conductor.</span>
+  </div>
+  <div class="flex gap-8">
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#privacy">Privacy Policy</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#terms">Terms of Service</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#faq">FAQ</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#support">Support</a>
+  </div>
+</footer>
+
+<script>
+  let currentStep = 1;
+  const state = { free: false, invite: false };
+
+  // ── Read logged-in user email from localStorage (set by auth-nav.js) ────────
+  const userEmail = localStorage.getItem("userEmail") || "";
+
+  // Pre-fill host email if available
+  window.addEventListener("DOMContentLoaded", () => {
+    if (userEmail) document.getElementById("f-email").value = userEmail;
+  });
+
+  // Toast
+  let toastTimer;
+  function showToast(msg, type) {
+    const t = document.getElementById("toast");
+    document.getElementById("toastMsg").textContent  = msg;
+    document.getElementById("toastIcon").textContent = type === "success" ? "check_circle" : "error";
+    t.className = "show " + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.className = type; }, 3500);
+  }
+
+  function updateFileLabel(input) {
+    document.getElementById("fileLabel").textContent = input.files[0] ? input.files[0].name : "Click to upload or drag and drop";
+  }
+
+  // Toggles
+  function toggleOption(which) {
+    if (which === "free") {
+      state.free = !state.free;
+      if (state.free) { state.invite = false; document.getElementById("f-price").value = "0"; }
+    } else {
+      state.invite = !state.invite;
+      if (state.invite) state.free = false;
+    }
+    document.getElementById("toggleFree").classList.toggle("on", state.free);
+    document.getElementById("toggleInvite").classList.toggle("on", state.invite);
+  }
+
+  function onPriceInput(val) {
+    if (val === "0" || parseInt(val) === 0) {
+      state.free = true; state.invite = false;
+      document.getElementById("toggleFree").classList.add("on");
+      document.getElementById("toggleInvite").classList.remove("on");
+    } else if (val !== "") {
+      state.free = false;
+      document.getElementById("toggleFree").classList.remove("on");
+    }
+  }
+
+  // Step navigation
+  function goToStep(n) {
+    if (n > 1 && currentStep === 1) {
+      const email    = document.getElementById("f-email").value.trim();
+      const title    = document.getElementById("f-title").value.trim();
+      const location = document.getElementById("f-location").value.trim();
+      const date     = document.getElementById("f-date").value;
+      if (!email || !title || !location || !date) {
+        showToast("Please fill in Email, Title, Location and Date.", "error");
+        return;
+      }
+    }
+
+    if (n === 3) {
+      const price    = document.getElementById("f-price").value;
+      const capacity = document.getElementById("f-capacity").value;
+      const imgFile  = document.getElementById("f-image").files[0];
+
+      document.getElementById("rv-email").textContent    = document.getElementById("f-email").value    || "—";
+      document.getElementById("rv-title").textContent    = document.getElementById("f-title").value    || "—";
+      document.getElementById("rv-category").textContent = document.getElementById("f-category").value || "—";
+      document.getElementById("rv-location").textContent = document.getElementById("f-location").value || "—";
+      document.getElementById("rv-date").textContent     = document.getElementById("f-date").value     || "—";
+      document.getElementById("rv-time").textContent     = document.getElementById("f-time").value     || "—";
+      document.getElementById("rv-desc").textContent     = document.getElementById("f-desc").value     || "No description provided.";
+      document.getElementById("rv-capacity").textContent = capacity ? capacity + " seats" : "—";
+      document.getElementById("rv-image").textContent    = imgFile ? imgFile.name : "No image uploaded";
+
+      let priceDisplay = price ? "₹" + price : "—";
+      if (state.free)        priceDisplay = "Free Entry";
+      else if (state.invite) priceDisplay = "Invite Only";
+      document.getElementById("rv-price").textContent = priceDisplay;
+
+      const accessEl = document.getElementById("rv-access");
+      if (state.invite)    { accessEl.textContent = "Invite Only";   accessEl.style.color = "#a7a5ff"; }
+      else if (state.free) { accessEl.textContent = "Free Entry";    accessEl.style.color = "#4ade80"; }
+      else                 { accessEl.textContent = "Standard Paid"; accessEl.style.color = "#af88ff"; }
+    }
+
+    document.getElementById("step" + currentStep).classList.add("hidden-step");
+    document.getElementById("step" + n).classList.remove("hidden-step");
+
+    for (let i = 1; i <= 3; i++) {
+      const side = document.getElementById("sideStep" + i);
+      const dot  = document.getElementById("dot" + i);
+      if (i < n) {
+        side.classList.remove("opacity-40");
+        dot.className = "w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold";
+        dot.innerHTML = '<span class="material-symbols-outlined text-base">check</span>';
+      } else if (i === n) {
+        side.classList.remove("opacity-40");
+        dot.className = "w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold step-active";
+        dot.textContent = i;
+      } else {
+        side.classList.add("opacity-40");
+        dot.className = "w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold";
+        dot.textContent = i;
+      }
+    }
+
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Launch
+  async function launchEvent() {
+    const btn = document.getElementById("launchBtn");
+    btn.disabled = true; btn.style.opacity = "0.7";
+
+    const title     = document.getElementById("f-title").value.trim();
+    const desc      = document.getElementById("f-desc").value.trim();
+    const date      = document.getElementById("f-date").value;
+    const time      = document.getElementById("f-time").value;
+    const location  = document.getElementById("f-location").value.trim();
+    const category  = document.getElementById("f-category").value;
+    const hostEmail = localStorage.getItem("userEmail");
+    const capacity = document.getElementById("f-capacity").value;
+    const priceInput = document.getElementById("f-price").value;
+
+    let price = priceInput;
+
+    if (access_type === "free") {
+      price = "0";
+    }
+
+    // fix free events
+    let access_type = "paid";
+    if (state.free) access_type = "free";
+    else if (state.invite) access_type = "invite";
+
+    if (!hostEmail) {
+      showToast("Host email is missing.", "error");
+      btn.disabled = false; btn.style.opacity = "1";
+      return;
+    }
+
+    try {
+      const res  = await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          description: desc,
+          date,
+          time,
+          location,
+          category,
+          capacity,
+          user_email: hostEmail,   // ✅ fixed: was undefined `userEmail` variable
+          price,
+          access_type: access_type,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showToast("Event launched successfully! 🚀", "success");
+        setTimeout(() => { window.location.href = "./events.html"; }, 1800);
+      } else {
+        showToast(data.error || "Failed to launch event.", "error");
+        btn.disabled = false; btn.style.opacity = "1";
+      }
+    } catch {
+      showToast("Cannot reach server. Is it running?", "error");
+      btn.disabled = false; btn.style.opacity = "1";
+    }
+  }
+function logout() {
+  localStorage.clear()
+  window.location.href = "./index.html";
+}
+</script>
+<script src="./js/auth-nav.js"></script>
+</body>
+</html>

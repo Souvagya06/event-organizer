@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Indigo Horizon | The Midnight Conductor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/style.css">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#ffb2b9",
+              "surface": "#010f20",
+              "primary-fixed": "#9795ff",
+              "surface-tint": "#a7a5ff",
+              "error-dim": "#d73357",
+              "secondary-dim": "#8a4cfc",
+              "primary-fixed-dim": "#8885ff",
+              "on-secondary-container": "#e1d0ff",
+              "surface-container-high": "#0b2038",
+              "on-error": "#490013",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#000000",
+              "on-primary-container": "#14007e",
+              "secondary": "#af88ff",
+              "on-tertiary-fixed-variant": "#4e5f72",
+              "tertiary-dim": "#c7d9ef",
+              "on-secondary-fixed": "#430097",
+              "surface-container-low": "#031428",
+              "on-primary-fixed-variant": "#1a0099",
+              "on-surface": "#d8e6ff",
+              "tertiary-fixed-dim": "#c7d9ef",
+              "on-secondary": "#2b0065",
+              "primary-container": "#9795ff",
+              "tertiary": "#eef4ff",
+              "on-tertiary-container": "#445568",
+              "primary-dim": "#645efb",
+              "outline": "#68768c",
+              "surface-bright": "#152d49",
+              "on-background": "#d8e6ff",
+              "primary": "#a7a5ff",
+              "tertiary-container": "#d5e7fe",
+              "on-secondary-fixed-variant": "#6514d6",
+              "outline-variant": "#3b495d",
+              "secondary-fixed-dim": "#d0b8ff",
+              "tertiary-fixed": "#d5e7fe",
+              "surface-variant": "#102740",
+              "on-primary": "#1c00a0",
+              "on-surface-variant": "#9dacc3",
+              "background": "#010f20",
+              "surface-container-highest": "#102740",
+              "on-tertiary-fixed": "#324355",
+              "inverse-surface": "#f8f9ff",
+              "secondary-fixed": "#dcc9ff",
+              "on-tertiary": "#4c5d70",
+              "surface-container": "#071a30",
+              "inverse-on-surface": "#48566a",
+              "error": "#ff6e84",
+              "error-container": "#a70138",
+              "surface-dim": "#010f20",
+              "secondary-container": "#6001d1",
+              "inverse-primary": "#4e45e4"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(16, 39, 64, 0.7);
+            backdrop-filter: blur(20px);
+        }
+        .text-gradient {
+         background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%);
+         -webkit-background-clip: text;
+         background-clip: text;   /* ADD THIS */
+         -webkit-text-fill-color: transparent;
+        }
+        .cta-gradient {
+            background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#010f20] dark:bg-[#010f20] bg-[#031428] flex justify-between items-center px-8 h-16 w-full max-w-full">
+<div class="flex items-center gap-12">
+<span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-['Inter'] font-medium tracking-tight text-sm text-[#a7a5ff] border-b-2 border-[#645efb] pb-1" href="./index.html">Home</a>
+<a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors duration-200 ease-in-out hover:bg-[#152d49] px-3 py-1 rounded" href="./contact.html">Contact</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<a class="cta-gradient px-5 py-2 rounded-lg font-['Inter'] font-medium tracking-tight text-sm text-on-primary active:scale-95 opacity-90 hover:opacity-100 transition-all" href="./login.html">Get Started</a>
+</div>
+</nav>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative min-h-[870px] flex items-center justify-center overflow-hidden px-8">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-b from-surface via-surface/80 to-surface"></div>
+<img alt="" class="w-full h-full object-cover opacity-30" data-alt="dramatic abstract background with flowing deep indigo and purple silk textures and cinematic lighting on dark navy canvas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9gnkOnnAGR8sLvfA0cqbGAkbTCRA3mnujd24wtrmiLMCrrkbr3rMASww9zMeOHkmWzEMIXOyR4V8lB2LyrgWBHol4vPYmJ35vvP35GOGJ1df2OMiQjp3OnA7Zk4Se7I3R22VBT3w10Oos9Kbz4e8eTh5vF9qWd1RKrL1EGMqKOQa-YzSna6eaD8IAMCmWj-NdcN-dhHtVw4B-T7xHvwz2T1jceYJpnPlT7vwiEqJQD2nKe0jGB5JVEMhHcXmJTAIsYC0n50nlEaeL"/>
+</div>
+<div class="relative z-10 max-w-5xl text-center space-y-8">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-highest border border-outline-variant/15">
+<span class="material-symbols-outlined text-primary scale-75" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-xs uppercase tracking-[0.2em] font-bold text-on-surface-variant">The Midnight Conductor</span>
+</div>
+<h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-on-surface">
+                    Plan, Create &amp; <br/>
+<span class="text-gradient">Manage Events</span> Easily
+                </h1>
+<p class="max-w-2xl mx-auto text-lg md:text-xl text-on-surface-variant leading-relaxed">
+                    Orchestrate high-stakes experiences with surgical precision. The digital ledger for the world's most sophisticated gatherings.
+                </p>
+<div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-4">
+  
+<a class="cta-gradient px-8 py-4 rounded-lg text-lg font-bold text-on-primary shadow-2xl transition-all hover:scale-105 active:scale-95 min-w-[200px]" href="./login.html">
+                        Events
+                    </a>
+</div>
+</div>
+</section>
+<!-- Categories Section (Asymmetric Bento) -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div class="space-y-2">
+<span class="text-primary font-bold tracking-widest text-xs uppercase">Curated Curiosities</span>
+<h2 class="text-4xl font-bold tracking-tight">Explore Categories</h2>
+</div>
+<div class="h-px flex-1 bg-outline-variant/15 mx-8 mb-4 hidden md:block"></div>
+<p class="text-on-surface-variant text-sm max-w-[240px]">Tailored environments for every type of human connection.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[500px]">
+<!-- Wedding -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl bg-surface-container-high">
+<img alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="elegant dark-themed wedding reception with glowing candles and luxury minimalist floral arrangements in deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUV5OFFrpzZbl3Wn8JK-QmUnxBpesDhr5VnU-6vTMlM7mfvcGkQPExTIZ8aDwplc5EkT7Ze3vvpgOsxf40X6iJ9EP_gFYyrngk7MIjxIduve-8QrygclFLOxv0SPtXaux9PkutZOZwgheNZVHevV94YaYfOIdeivRYKOptTN68H3j1yKNrDr4juaWB5QWbp8Kp_ZafJddyFblKfdIrjhYguK-o-MoowpbFzBTkxBHmUoibaWik2wCj3rpaExyNWxmuVhwapVlqQtH1"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<h3 class="text-2xl font-bold mb-1">Wedding</h3>
+<p class="text-on-surface-variant text-xs uppercase tracking-widest">Timeless Elegance</p>
+</div>
+<div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_outward</span>
+</div>
+</div>
+<!-- Tech -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-high">
+<img alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="futuristic tech conference stage with vibrant indigo laser lights and high-definition screens in a dark arena" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYpflAmrT0qxlXikV8dFonPrZLNONsFu5APy4eV3wxRvKJip_mWlOsCD1Cmnhrzhk_EvTG6QgrNoiJv1T9UN4BmbE-q_zR7vXw8E5TA4egw8KqAIfzty5qpQsmW9xp-MSIqgQrv71dbALuI3KWyTiNvkwVFGAa1D1Wo2_7nBTMtYHSGNqTsv-DEhqMgN4KnlnCbOoukvmjBOGNAr_TBnc-9B1Z05MDX0ClpQ94WaGEDFr88F702xGJipFU0J6qfoX1JcNf2HVlyn3V"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<h3 class="text-3xl font-black mb-1 uppercase tracking-tighter">Tech Summits</h3>
+<p class="text-on-surface-variant text-xs uppercase tracking-widest">Future-Proof Orchestration</p>
+</div>
+<div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_outward</span>
+</div>
+</div>
+<!-- Music -->
+<div class="md:col-span-12 group relative overflow-hidden rounded-xl bg-surface-container-high h-64 md:h-auto">
+<img alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="crowd at an intimate underground music concert with silhouettes and dramatic purple backlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCmiiK6POgL_oZi0bN1MmWNjakQUOz3LrdFQ8g1eg4X5xUx2a6YSgdLScCXzGSdjLJzeg-VlJr6JwI0SXwDCzsOytUl61MRCTF-JVyl7zBK36vXIarC0pvORWcZ2Ev2VpkO6j70ZzEo755dsJ_FpE60K5QC0DPEo4IhUIWD7QRLUd6MxZiNssiyh1MMxrCvF9CrB-cNJDJIoU7nDWW537jLu9o172bXkcIpyGtqR3gYE7CZyJBF2a0rcSlc-rKFVGKI388FAjT-aMz"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/40 to-transparent"></div>
+<div class="absolute inset-y-0 left-8 flex flex-col justify-center max-w-md">
+<h3 class="text-4xl font-bold mb-2">Music &amp; Festivals</h3>
+<p class="text-on-surface-variant mb-4">From underground clubs to global stadiums. Manage lineups, ticketing, and production seamlessly.</p>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-tighter">Live Sound</span>
+<span class="px-3 py-1 rounded-full bg-secondary/20 text-secondary text-[10px] font-bold uppercase tracking-tighter">Artist Management</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Search / CTA Section -->
+<section class="py-32 relative overflow-hidden">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full"></div>
+<div class="max-w-4xl mx-auto px-8 relative z-10 text-center">
+<h2 class="text-4xl font-black tracking-tight mb-8">Ready to Conduct Your Next Event?</h2>
+
+<a class="cta-gradient px-12 py-4 rounded-lg font-bold text-on-primary shadow-lg hover:shadow-primary/20 transition-all" href="./login.html">
+                        Get Started Now
+                    </a>
+</div>
+<div class="mt-12 flex flex-wrap justify-center gap-8 opacity-40 grayscale contrast-125">
+<span class="font-black italic tracking-tighter text-2xl">HYPERLIGHT</span>
+<span class="font-black italic tracking-tighter text-2xl">ORBITAL</span>
+<span class="font-black italic tracking-tighter text-2xl">SPECTRE</span>
+<span class="font-black italic tracking-tighter text-2xl">VOID_TECH</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#010f20] dark:bg-[#010f20] w-full border-t border-[#3b495d]/15 bg-[#031428] flex flex-col md:flex-row justify-between items-center px-12 py-8 gap-4 w-full">
+<div class="flex flex-col md:items-start items-center gap-2">
+<span class="text-lg font-black text-[#d8e6ff]">Indigo Horizon</span>
+<span class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3]">© 2026 Indigo Horizon. The Midnight Conductor.</span>
+</div>
+<div class="flex gap-8">
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">Privacy Policy</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">Terms of Service</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">FAQ</a>
+<a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">Support</a>
+</div>
+</footer>
+</body></html>

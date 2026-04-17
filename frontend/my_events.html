@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Events | Indigo Horizon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/style.css">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#ffb2b9",
+              "surface": "#010f20",
+              "primary-fixed": "#9795ff",
+              "surface-tint": "#a7a5ff",
+              "error-dim": "#d73357",
+              "secondary-dim": "#8a4cfc",
+              "primary-fixed-dim": "#8885ff",
+              "on-secondary-container": "#e1d0ff",
+              "surface-container-high": "#0b2038",
+              "on-error": "#490013",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#000000",
+              "on-primary-container": "#14007e",
+              "secondary": "#af88ff",
+              "on-tertiary-fixed-variant": "#4e5f72",
+              "tertiary-dim": "#c7d9ef",
+              "on-secondary-fixed": "#430097",
+              "surface-container-low": "#031428",
+              "on-primary-fixed-variant": "#1a0099",
+              "on-surface": "#d8e6ff",
+              "tertiary-fixed-dim": "#c7d9ef",
+              "on-secondary": "#2b0065",
+              "primary-container": "#9795ff",
+              "tertiary": "#eef4ff",
+              "on-tertiary-container": "#445568",
+              "primary-dim": "#645efb",
+              "outline": "#68768c",
+              "surface-bright": "#152d49",
+              "on-background": "#d8e6ff",
+              "primary": "#a7a5ff",
+              "tertiary-container": "#d5e7fe",
+              "on-secondary-fixed-variant": "#6514d6",
+              "outline-variant": "#3b495d",
+              "secondary-fixed-dim": "#d0b8ff",
+              "tertiary-fixed": "#d5e7fe",
+              "surface-variant": "#102740",
+              "on-primary": "#1c00a0",
+              "on-surface-variant": "#9dacc3",
+              "background": "#010f20",
+              "surface-container-highest": "#102740",
+              "on-tertiary-fixed": "#324355",
+              "inverse-surface": "#f8f9ff",
+              "secondary-fixed": "#dcc9ff",
+              "on-tertiary": "#4c5d70",
+              "surface-container": "#071a30",
+              "inverse-on-surface": "#48566a",
+              "error": "#ff6e84",
+              "error-container": "#a70138",
+              "surface-dim": "#010f20",
+              "secondary-container": "#6001d1",
+              "inverse-primary": "#4e45e4"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #010f20; color: #d8e6ff; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .glass-panel { background: rgba(16, 39, 64, 0.7); backdrop-filter: blur(20px); }
+  .primary-gradient { background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%); }
+  .cta-gradient { background: linear-gradient(135deg, #a7a5ff 0%, #645efb 100%); }
+
+  .accent-music    { border-left-color: #af88ff; }
+  .accent-tech     { border-left-color: #a7a5ff; }
+  .accent-art      { border-left-color: #7bd0ff; }
+  .accent-food     { border-left-color: #ff6e84; }
+  .accent-wellness { border-left-color: #6adf8e; }
+  .accent-business { border-left-color: #ffd166; }
+</style>
+</head>
+<body class="bg-surface text-on-surface">
+
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#010f20] flex justify-between items-center px-8 h-16">
+  <div class="flex items-center gap-12">
+    <span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./events.html">Events</a>
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./create-event.html">Create Event</a>
+      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#a7a5ff] border-b-2 border-[#645efb] pb-1" href="./my_events.html">My Events</a>
+    </div>
+  </div>
+  <div class="flex items-center gap-4">
+    <button onclick="logout()" class="cta-gradient px-5 py-2 rounded-lg font-['Inter'] font-medium tracking-tight text-sm text-on-primary active:scale-95 opacity-90 hover:opacity-100 transition-all">LOGOUT</button>
+  </div>
+</nav>
+
+<main class="pt-16 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
+
+  <!-- Editorial Header Section -->
+  <section class="mb-16 pt-8">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-tertiary text-xs font-bold uppercase tracking-widest mb-6">
+      <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+      Member Dashboard
+    </div>
+    <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-4 bg-gradient-to-r from-white via-on-background to-slate-500 bg-clip-text text-transparent">
+      My Events
+    </h1>
+    <p class="text-on-surface-variant text-lg md:text-xl max-w-2xl font-medium leading-relaxed">
+      Manage and track all your created events. Control scheduling, attendees, and performance from your orchestrated void.
+    </p>
+  </section>
+
+  <!-- Dynamic content area — populated by JS -->
+  <section id="eventsSection" class="relative">
+    <!-- Empty State (shown by default, replaced if user has events) -->
+    <div id="emptyState" class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+      <!-- Large Decorative Visual -->
+      <div class="md:col-span-7 lg:col-span-8 rounded-3xl overflow-hidden relative min-h-[400px] md:min-h-full">
+        <img alt="Empty stage" class="absolute inset-0 w-full h-full object-cover"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGq9Ffj1jL9ebWgJ6Lv8bhL2X8ssjOutiSgc-Hjxtv7mgLenYyk6Yg3H1oJ0OglRef92CszOcMTm_HtlEeXJ1fjso5f4OX8DZm8OllWd4q64sMuTdDkDpYyeNRfb3FOCA5rBlT1UgOFzmE66FbeTrtQDwjFcPBaBRsn93BJw-wFW7hrs57pOz8fB9z-tO9cLmfBpb1cIIA4P44vvZ_abhWX-f6ug8rE0AX-WaUkJtUNliphYBv5QsGFB3UUjNWbmXDfphuqXhHlHSg"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+        <div class="absolute bottom-8 left-8 right-8">
+          <div class="text-tertiary font-bold tracking-widest text-xs uppercase mb-2">Perspective</div>
+          <h3 class="text-2xl font-bold text-white max-w-md italic">"Every great performance starts with an empty room and a single idea."</h3>
+        </div>
+      </div>
+      <!-- Functional Empty State Content -->
+      <div class="md:col-span-5 lg:col-span-4 glass-panel rounded-3xl p-8 md:p-12 flex flex-col justify-center items-center text-center shadow-2xl">
+        <div class="w-24 h-24 mb-8 bg-surface-container-high rounded-2xl flex items-center justify-center text-primary-container relative overflow-hidden group">
+          <div class="absolute inset-0 bg-primary-container opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 0;">event_busy</span>
+        </div>
+        <h2 class="text-3xl font-black text-white mb-4 tracking-tight">No Events Yet</h2>
+        <p class="text-on-surface-variant text-base mb-10 leading-relaxed font-medium">
+          You haven't created any events yet. Start by creating your first event to see it appear in your dashboard.
+        </p>
+        <a class="w-full group" href="create-event.html">
+          <div class="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] p-px rounded-xl">
+            <div class="bg-[#041425] group-hover:bg-transparent transition-colors py-4 px-8 rounded-xl flex items-center justify-center gap-3">
+              <span class="text-white font-bold tracking-tight">Create Event</span>
+              <span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+            </div>
+          </div>
+        </a>
+        <div class="mt-8 flex items-center gap-4 text-xs text-on-surface-variant/60 font-semibold uppercase tracking-widest">
+          <div class="h-px flex-grow bg-outline-variant/20"></div>
+          <span>Explore Patterns</span>
+          <div class="h-px flex-grow bg-outline-variant/20"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events Grid (hidden until data loads) -->
+    <div id="eventsGrid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Auxiliary Information Grid -->
+  <section class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="p-8 rounded-3xl bg-surface-container-low border-l border-primary-container/20">
+      <span class="material-symbols-outlined text-primary mb-4">analytics</span>
+      <h4 class="text-on-surface font-bold text-lg mb-2">Track Engagement</h4>
+      <p class="text-on-surface-variant text-sm leading-relaxed">Detailed insights into attendee registration and real-time interaction metrics.</p>
+    </div>
+    <div class="p-8 rounded-3xl bg-surface-container-low border-l border-tertiary/20">
+      <span class="material-symbols-outlined text-tertiary mb-4">stadium</span>
+      <h4 class="text-on-surface font-bold text-lg mb-2">Global Venues</h4>
+      <p class="text-on-surface-variant text-sm leading-relaxed">Access premium digital and physical spaces orchestrated for high impact.</p>
+    </div>
+    <div class="p-8 rounded-3xl bg-surface-container-low border-l border-secondary/20">
+      <span class="material-symbols-outlined text-secondary mb-4">security</span>
+      <h4 class="text-on-surface font-bold text-lg mb-2">Secure Access</h4>
+      <p class="text-on-surface-variant text-sm leading-relaxed">Integrated ticketing with end-to-end encryption and decentralized verification.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#010f20] dark:bg-[#010f20] w-full border-t border-[#3b495d]/15 bg-[#031428] flex flex-col md:flex-row justify-between items-center px-12 py-8 gap-4 w-full">
+  <div class="flex flex-col md:items-start items-center gap-2">
+    <span class="text-lg font-black text-[#d8e6ff]">Indigo Horizon</span>
+    <span class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3]">© 2026 Indigo Horizon. The Midnight Conductor.</span>
+  </div>
+  <div class="flex gap-8">
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">Privacy Policy</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">Terms of Service</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">FAQ</a>
+    <a class="font-['Inter'] text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html">Support</a>
+  </div>
+</footer>
+
+<script>
+  // ── SAFE NUMBER HELPER ────────────────────────────────────
+  // Turso can return BigInt, number, or string — coerce safely
+  function toInt(val) {
+    if (val === null || val === undefined) return 0;
+    return Number(val) || 0;
+  }
+
+  // ── RENDER HELPERS ────────────────────────────────────────
+  function showEmptyState() {
+    document.getElementById("emptyState").classList.remove("hidden");
+    document.getElementById("eventsGrid").classList.add("hidden");
+  }
+
+  function showGrid() {
+    document.getElementById("emptyState").classList.add("hidden");
+    document.getElementById("eventsGrid").classList.remove("hidden");
+  }
+
+  // ── LOAD MY EVENTS ────────────────────────────────────────
+  async function loadMyEvents() {
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+      console.warn("No user logged in");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/events/mine?email=${encodeURIComponent(email)}`);
+      const myEvents = await res.json();
+
+      const grid = document.getElementById("eventsGrid");
+
+      if (!myEvents.length) {
+        showEmptyState();
+        return;
+      }
+
+      showGrid();
+      grid.innerHTML = ""; // clear before re-render
+
+      myEvents.forEach(ev => {
+        // FIX: use toInt() so Turso BigInt / string values are handled safely
+        const filled   = toInt(ev.total_registered);
+        const capacity = toInt(ev.capacity);
+
+        const pct = capacity > 0
+          ? Math.min(100, Math.round((filled / capacity) * 100))
+          : 0;
+
+        const seatsLeft = capacity > 0
+          ? Math.max(0, capacity - filled)
+          : null;
+
+        let priceText = "";
+        if (ev.access_type === "free") {
+          priceText = "Free Entry";
+        } else if (ev.access_type === "invite") {
+          priceText = "Invite Only";
+        } else if (ev.price && ev.price !== "0") {
+          priceText = "₹" + ev.price;
+        } else {
+          priceText = "Free Entry";
+        }
+
+        const seatsHtml = capacity > 0 ? `
+          <div class="mt-3">
+            <div class="flex justify-between text-xs text-on-surface-variant mb-1">
+              <span>Registrations</span>
+              <span>${filled} / ${capacity}</span>
+            </div>
+            <div class="h-2 bg-gray-700 rounded overflow-hidden">
+              <div class="h-full rounded transition-all duration-500"
+                style="width:${pct}%; background: ${pct >= 90 ? '#ff6e84' : pct >= 60 ? '#ffd166' : '#a7a5ff'}">
+              </div>
+            </div>
+            <div class="flex justify-between text-xs mt-1">
+              <span class="text-primary">${pct}% filled</span>
+              <span class="${seatsLeft === 0 ? 'text-red-400' : seatsLeft <= 5 ? 'text-yellow-400' : 'text-green-400'}">
+                ${seatsLeft === 0 ? 'Sold out' : seatsLeft <= 5 ? `⚠ ${seatsLeft} left` : `${seatsLeft} seats left`}
+              </span>
+            </div>
+          </div>
+        ` : `
+          <div class="text-xs text-green-400 mt-3">
+            👥 ${filled} registered · Open capacity
+          </div>
+        `;
+
+        const card = document.createElement("div");
+        card.className = "glass-panel p-6 rounded-xl border-l-4 accent-music flex flex-col";
+        card.dataset.eventId = ev.id;
+
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-3">
+            <h3 class="text-xl font-bold">${ev.title}</h3>
+            <span class="text-xs font-bold text-green-400 ml-2 shrink-0">${priceText}</span>
+          </div>
+
+          <p class="text-sm text-on-surface-variant mb-3">${ev.description || ""}</p>
+
+          <div class="text-sm space-y-1 mb-2">
+            <div>📍 ${ev.location}</div>
+            <div>📅 ${ev.date}${ev.time ? " " + ev.time : ""}</div>
+            <div class="text-primary font-semibold">${ev.category || "Event"}</div>
+          </div>
+
+          ${seatsHtml}
+
+          <button onclick="deleteEvent(${ev.id}, this)"
+            class="w-full py-2 mt-4 rounded bg-error/20 text-error hover:bg-error/30 transition-all text-sm font-bold border border-error/30 active:scale-95">
+            Delete Event
+          </button>
+        `;
+
+        grid.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error("Error loading events:", err);
+    }
+  }
+
+  // ── DELETE EVENT ──────────────────────────────────────────
+  async function deleteEvent(id, btn) {
+    if (!confirm("Delete this event? This cannot be undone.")) return;
+
+    btn.disabled = true;
+    btn.textContent = "Deleting…";
+
+    try {
+      const res = await fetch(`/api/events/${id}`, { method: "DELETE" });
+
+      if (res.ok) {
+        // Remove the card from DOM
+        const card = btn.closest("[data-event-id]");
+        if (card) card.remove();
+
+        // FIX: if no cards remain, restore empty state
+        const grid = document.getElementById("eventsGrid");
+        if (grid.querySelectorAll("[data-event-id]").length === 0) {
+          showEmptyState();
+        }
+      } else {
+        alert("Failed to delete event.");
+        btn.disabled = false;
+        btn.textContent = "Delete Event";
+      }
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = "Delete Event";
+    }
+  }
+
+  // ── INIT ──────────────────────────────────────────────────
+  loadMyEvents();
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = "./index.html";
+  }
+</script>
+</body>
+</html>

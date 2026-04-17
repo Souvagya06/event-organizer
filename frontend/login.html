@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Indigo Horizon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface-variant": "#273648", "on-surface-variant": "#c7c4d8",
+          "primary-fixed": "#e2dfff", "on-primary-container": "#dad7ff",
+          "on-tertiary": "#00354a", "on-secondary": "#3f008e",
+          "on-surface": "#d4e4fc", "on-primary-fixed": "#0f0069",
+          "on-primary-fixed-variant": "#3323cc", "background": "#041425",
+          "surface": "#041425", "secondary-fixed-dim": "#d2bbff",
+          "on-tertiary-fixed-variant": "#004c69", "on-error-container": "#ffdad6",
+          "on-background": "#d4e4fc", "error-container": "#93000a",
+          "tertiary-fixed": "#c4e7ff", "tertiary": "#7bd0ff",
+          "surface-container-lowest": "#010f20", "on-secondary-fixed": "#25005a",
+          "error": "#ffb4ab", "tertiary-container": "#00678c",
+          "primary-container": "#4f46e5", "outline": "#918fa1",
+          "on-tertiary-container": "#b2e1ff", "on-secondary-container": "#c9aeff",
+          "surface-container": "#112032", "tertiary-fixed-dim": "#7bd0ff",
+          "secondary-fixed": "#eaddff", "surface-tint": "#c3c0ff",
+          "surface-dim": "#041425", "inverse-surface": "#d4e4fc",
+          "surface-container-high": "#1c2b3d", "on-secondary-fixed-variant": "#5a00c6",
+          "on-tertiary-fixed": "#001e2c", "on-error": "#690005",
+          "inverse-primary": "#4d44e3", "surface-container-highest": "#273648",
+          "outline-variant": "#464555", "inverse-on-surface": "#233144",
+          "surface-container-low": "#0d1c2e", "secondary-container": "#6001d1",
+          "secondary": "#d2bbff", "primary-fixed-dim": "#c3c0ff",
+          "primary": "#c3c0ff", "surface-bright": "#2c3a4d", "on-primary": "#1d00a5"
+        },
+        fontFamily: { "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"] },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .horizon-gradient { background: linear-gradient(135deg, #4f46e5 0%, #6001d1 100%); }
+  .ghost-border { border: 1px solid rgba(70, 69, 85, 0.2); }
+  .ambient-glow { box-shadow: 0 0 80px -20px rgba(79, 70, 229, 0.15); }
+
+  /* Card flip */
+  .card-scene { perspective: 1200px; width: 100%; max-width: 28rem; }
+  .card-flipper { position: relative; width: 100%; transform-style: preserve-3d; transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1); }
+  .card-flipper.flipped { transform: rotateY(180deg); }
+  .card-face { width: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .card-face.back { position: absolute; top: 0; left: 0; transform: rotateY(180deg); }
+
+  /* Toast */
+  #toast {
+    position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    z-index: 9999; min-width: 280px; max-width: 420px;
+    padding: 14px 20px; border-radius: 12px;
+    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    opacity: 0; pointer-events: none; white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  #toast.success { background: #0a2218; border: 1px solid #22c55e; color: #4ade80; }
+  #toast.error   { background: #220a0a; border: 1px solid #ef4444; color: #f87171; }
+  #toast.info    { background: #0a0e22; border: 1px solid #a7a5ff; color: #c3c0ff; }
+
+  /* Spinner */
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .spinning { animation: spin 0.9s linear infinite; }
+
+  .btn-loading { opacity: 0.65; pointer-events: none; }
+</style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col">
+
+<!-- ── Toast ── -->
+<div id="toast">
+  <span id="toastIcon" class="material-symbols-outlined" style="font-size:18px;flex-shrink:0"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- ── NavBar ── -->
+<nav class="fixed top-0 w-full z-50 bg-[#010f20] flex justify-between items-center px-8 h-16">
+  <div class="flex items-center gap-12">
+    <span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
+    <div class="hidden md:flex gap-8 items-center">
+    </div>
+  </div>
+
+</nav>
+
+<!-- ── Main ── -->
+<main class="flex-grow flex items-center justify-center relative overflow-hidden px-6 py-24 pt-28">
+  <div class="absolute top-1/4 -left-20 w-96 h-96 bg-primary-container/20 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-secondary-container/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="card-scene z-10">
+    <div class="card-flipper" id="cardFlipper">
+
+      <!-- ── FRONT: Login ── -->
+      <div class="card-face front">
+        <div class="bg-surface-container-lowest/60 backdrop-blur-2xl p-8 md:p-10 rounded-[2rem] ghost-border ambient-glow">
+          <div class="mb-8">
+            <h1 class="text-4xl font-extrabold tracking-tighter text-on-surface mb-2">Login to Continue</h1>
+            <p class="text-on-surface-variant text-base">Access your organizer dashboard</p>
+          </div>
+          <div class="space-y-5">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-on-surface-variant ml-1">Email Address</label>
+              <input id="login-email" type="email" placeholder="name@company.com"
+                class="w-full min-h-[52px] bg-surface-container-low text-on-surface border-0 rounded-xl px-4 focus:ring-2 focus:ring-primary-container transition-all placeholder:text-outline/50 ghost-border"/>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center ml-1">
+                <label class="block text-sm font-medium text-on-surface-variant">Password</label>
+                <a class="text-xs text-tertiary hover:underline" href="#">Forgot?</a>
+              </div>
+              <input id="login-password" type="password" placeholder="••••••••"
+                class="w-full min-h-[52px] bg-surface-container-low text-on-surface border-0 rounded-xl px-4 focus:ring-2 focus:ring-primary-container transition-all placeholder:text-outline/50 ghost-border"/>
+            </div>
+            <div class="pt-2">
+              <button id="loginBtn" onclick="handleLogin()"
+                class="w-full min-h-[52px] horizon-gradient text-white font-bold text-base rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-lg flex items-center justify-center gap-2">
+                <span id="loginBtnText">Continue</span>
+                <span id="loginSpinner" class="material-symbols-outlined hidden" style="font-size:18px">progress_activity</span>
+              </button>
+            </div>
+            <div class="flex flex-col items-center gap-4 pt-2">
+              <a class="text-on-surface-variant hover:text-on-surface flex items-center gap-2 text-sm group" href="./index.html">
+                <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                Back to Home
+              </a>
+              <div class="w-full h-px bg-outline-variant/20"></div>
+              <p class="text-sm text-on-surface-variant/70">
+                Don't have an account?
+                <button type="button" onclick="flipToSignup()" class="text-primary font-semibold hover:text-primary-fixed transition-colors">Sign up</button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BACK: Sign Up ── -->
+      <div class="card-face back">
+        <div class="bg-surface-container-lowest/60 backdrop-blur-2xl p-8 md:p-10 rounded-[2rem] ghost-border ambient-glow">
+          <div class="mb-8">
+            <h1 class="text-4xl font-extrabold tracking-tighter text-on-surface mb-2">Create Account</h1>
+            <p class="text-on-surface-variant text-base">Join the Midnight Conductor network</p>
+          </div>
+          <div class="space-y-5">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-on-surface-variant ml-1">Full Name</label>
+              <input id="signup-name" type="text" placeholder="Elias Thorne"
+                class="w-full min-h-[52px] bg-surface-container-low text-on-surface border-0 rounded-xl px-4 focus:ring-2 focus:ring-primary-container transition-all placeholder:text-outline/50 ghost-border"/>
+            </div>
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-on-surface-variant ml-1">Email Address</label>
+              <input id="signup-email" type="email" placeholder="name@company.com"
+                class="w-full min-h-[52px] bg-surface-container-low text-on-surface border-0 rounded-xl px-4 focus:ring-2 focus:ring-primary-container transition-all placeholder:text-outline/50 ghost-border"/>
+            </div>
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-on-surface-variant ml-1">Password</label>
+              <input id="signup-password" type="password" placeholder="Min. 6 characters"
+                class="w-full min-h-[52px] bg-surface-container-low text-on-surface border-0 rounded-xl px-4 focus:ring-2 focus:ring-primary-container transition-all placeholder:text-outline/50 ghost-border"/>
+            </div>
+            <div class="pt-2">
+              <button id="signupBtn" onclick="handleSignup()"
+                class="w-full min-h-[52px] horizon-gradient text-white font-bold text-base rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-lg flex items-center justify-center gap-2">
+                <span id="signupBtnText">Create Account</span>
+                <span id="signupSpinner" class="material-symbols-outlined hidden" style="font-size:18px">progress_activity</span>
+              </button>
+            </div>
+            <div class="flex flex-col items-center gap-4 pt-2">
+              <div class="w-full h-px bg-outline-variant/20"></div>
+              <p class="text-sm text-on-surface-variant/70">
+                Already have an account?
+                <button type="button" onclick="flipToLogin()" class="text-primary font-semibold hover:text-primary-fixed transition-colors">Log in</button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /card-flipper -->
+  </div><!-- /card-scene -->
+</main>
+
+<!-- ── Footer ── -->
+<footer class="bg-[#010f20] w-full border-t border-[#3b495d]/15 flex flex-col md:flex-row justify-between items-center px-12 py-8 gap-4">
+  <div class="flex flex-col md:items-start items-center gap-2">
+    <span class="text-lg font-black text-[#d8e6ff]">Indigo Horizon</span>
+    <span class="text-xs uppercase tracking-widest text-[#9dacc3]">© 2026 Indigo Horizon. The Midnight Conductor.</span>
+  </div>
+  <div class="flex gap-8">
+    <a class="text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#privacy">Privacy Policy</a>
+    <a class="text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#terms">Terms of Service</a>
+    <a class="text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#faq">FAQ</a>
+    <a class="text-xs uppercase tracking-widest text-[#9dacc3] hover:text-[#af88ff] transition-all" href="./legal.html#support">Support</a>
+  </div>
+</footer>
+
+<script>
+  // ── Toast ──────────────────────────────────────────────────────────────────
+  let toastTimer;
+  function showToast(message, type = "info") {
+    const toast = document.getElementById("toast");
+    const icons = { success: "check_circle", error: "error", info: "info" };
+    document.getElementById("toastMsg").textContent  = message;
+    document.getElementById("toastIcon").textContent = icons[type] || "info";
+    toast.className = `show ${type}`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toast.className = type; }, 3500);
+  }
+
+  // ── Card flip ─────────────────────────────────────────────────────────────
+  function flipToSignup() { document.getElementById("cardFlipper").classList.add("flipped"); }
+  function flipToLogin()   { document.getElementById("cardFlipper").classList.remove("flipped"); }
+
+  // ── Button loading state ──────────────────────────────────────────────────
+  function setBtnLoading(btnId, spinnerId, textId, loading, label) {
+    document.getElementById(btnId).classList.toggle("btn-loading", loading);
+    const sp = document.getElementById(spinnerId);
+    loading
+      ? (sp.classList.remove("hidden"), sp.classList.add("spinning"))
+      : (sp.classList.add("hidden"),    sp.classList.remove("spinning"));
+    document.getElementById(textId).textContent = loading ? "Please wait…" : label;
+  }
+
+  // ── Login ─────────────────────────────────────────────────────────────────
+  async function handleLogin() {
+    const email    = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    if (!email || !password) {
+      showToast("Please fill in all fields.", "error");
+      return;
+    }
+
+    setBtnLoading("loginBtn", "loginSpinner", "loginBtnText", true, "Continue");
+
+    try {
+      const res  = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        if (data.token) localStorage.setItem("token", data.token);
+
+        // ✅ ADD THIS LINE
+        localStorage.setItem("userEmail", email);
+
+        showToast("Login successful! Redirecting…", "success");
+        setTimeout(() => { window.location.href = "/events.html"; }, 1200);
+      } else {
+        showToast(data.error || "Login failed.", "error");
+      }
+    } catch (err) {
+      showToast("Network error. Please try again.", "error");
+    } finally {
+      setBtnLoading("loginBtn", "loginSpinner", "loginBtnText", false, "Continue");
+    }
+  }
+
+  // ── Sign Up ───────────────────────────────────────────────────────────────
+  async function handleSignup() {
+    const name     = document.getElementById("signup-name").value.trim();
+    const email    = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
+
+    if (!name || !email || !password) {
+      showToast("Please fill in all fields.", "error");
+      return;
+    }
+    if (password.length < 6) {
+      showToast("Password must be at least 6 characters.", "error");
+      return;
+    }
+
+    setBtnLoading("signupBtn", "signupSpinner", "signupBtnText", true, "Create Account");
+
+    try {
+      const res  = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        showToast("Account created! Please log in.", "success");
+        setTimeout(() => { flipToLogin(); }, 1500);
+      } else {
+        showToast(data.error || "Sign up failed.", "error");
+      }
+    } catch (err) {
+      showToast("Network error. Please try again.", "error");
+    } finally {
+      setBtnLoading("signupBtn", "signupSpinner", "signupBtnText", false, "Create Account");
+    }
+  }
+
+  // Allow Enter key to submit whichever card is visible
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const flipped = document.getElementById("cardFlipper").classList.contains("flipped");
+    flipped ? handleSignup() : handleLogin();
+  });
+</script>
+</body>
+</html>
