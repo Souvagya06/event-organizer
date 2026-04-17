@@ -207,6 +207,7 @@
 </footer>
 
 <script>
+  const BASE_URL = "https://event-organizer-xs1l.onrender.com";
   // ── Toast ──────────────────────────────────────────────────────────────────
   let toastTimer;
   function showToast(message, type = "info") {
@@ -246,7 +247,7 @@
     setBtnLoading("loginBtn", "loginSpinner", "loginBtnText", true, "Continue");
 
     try {
-      const res  = await fetch("/api/auth/login", {
+      const res  = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -289,7 +290,7 @@
     setBtnLoading("signupBtn", "signupSpinner", "signupBtnText", true, "Create Account");
 
     try {
-      const res  = await fetch("/api/auth/signup", {
+      const res  = await fetch(`${BASE_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

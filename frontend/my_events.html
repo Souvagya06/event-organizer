@@ -204,6 +204,7 @@
 </footer>
 
 <script>
+  const BASE_URL = "https://event-organizer-xs1l.onrender.com";
   // ── SAFE NUMBER HELPER ────────────────────────────────────
   // Turso can return BigInt, number, or string — coerce safely
   function toInt(val) {
@@ -232,7 +233,7 @@
     }
 
     try {
-      const res = await fetch(`/api/events/mine?email=${encodeURIComponent(email)}`);
+      const res = await fetch(`${BASE_URL}/api/events/mine?email=${encodeURIComponent(email)}`);
       const myEvents = await res.json();
 
       const grid = document.getElementById("eventsGrid");
@@ -335,7 +336,7 @@
     btn.textContent = "Deleting…";
 
     try {
-      const res = await fetch(`/api/events/${id}`, { method: "DELETE" });
+      const res = await fetch(`${BASE_URL}/api/events/${id}`, { method: "DELETE" });
 
       if (res.ok) {
         // Remove the card from DOM

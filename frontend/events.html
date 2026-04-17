@@ -194,6 +194,7 @@
 </footer>
 
 <script>
+  const BASE_URL = "https://event-organizer-xs1l.onrender.com";
   // ── STATE ─────────────────────────────────────────────────
   let ALL_EVENTS = [];       // raw rows from DB — never mutated after fetch
   let filteredEvents = [];   // display slice — rebuilt on search/fetch
@@ -215,7 +216,7 @@
     if (!userEmail) return;
 
     try {
-      const res = await fetch(`/api/events/registered?email=${encodeURIComponent(userEmail)}`);
+      const res = await fetch(`${BASE_URL}/api/events/registered?email=${encodeURIComponent(userEmail)}`);
       if (!res.ok) return;
       const ids = await res.json();
       // ids is an array of event_id values (numbers or BigInts from Turso)
@@ -228,7 +229,7 @@
   // ── FETCH ALL EVENTS FROM BACKEND ────────────────────────
   async function fetchEvents() {
     try {
-      const res = await fetch("/api/events");
+      const res = await fetch(`${BASE_URL}/api/events`);
       const data = await res.json();
 
       // Store raw DB rows — do NOT transform date/time here.
@@ -295,7 +296,7 @@
     }
 
     try {
-      const res = await fetch(`/api/events/register`, {
+      const res = await fetch(`${BASE_URL}/api/events/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_email: userEmail, event_id: id })
@@ -330,7 +331,7 @@
       applyFilter(document.getElementById("searchInput").value);
 
       // 4. Silently re-fetch from DB in the background to get the real count
-      fetch("/api/events")
+      fetch(`${BASE_URL}/api/events`)
         .then(r => r.json())
         .then(data => {
           ALL_EVENTS = data;
