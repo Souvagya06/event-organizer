@@ -88,22 +88,47 @@
   <span id="toastMsg"></span>
 </div>
 
-<!-- Navbar -->
+<!-- TopNavBar -->
 <nav class="fixed top-0 w-full z-50 bg-[#010f20] flex justify-between items-center px-8 h-16">
   <div class="flex items-center gap-12">
-    <span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
-    <div class="hidden md:flex gap-8 items-center">
-      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./events.html">Events</a>
-      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#a7a5ff] border-b-2 border-[#645efb] pb-1" href="./create-event.html">Create Event</a>
-      <a class="font-['Inter'] font-medium tracking-tight text-sm text-[#9dacc3] hover:text-[#d8e6ff] transition-colors hover:bg-[#152d49] px-3 py-1 rounded" href="./my_events.html">My Events</a>
+  <span class="text-xl font-bold tracking-tighter text-[#d8e6ff]">Indigo Horizon</span>
+
+  <!-- 3-dot menu -->
+  <div class="relative">
+    <button onclick="toggleMenu()" 
+      class="p-2 rounded-lg hover:bg-[#152d49] transition">
+      <span class="material-symbols-outlined text-[#d8e6ff]">more_vert</span>
+    </button>
+
+    <!-- Dropdown -->
+    <div id="dropdownMenu" 
+      class="hidden absolute right-0 mt-2 w-48 bg-[#031428] border border-[#3b495d]/20 rounded-lg shadow-lg overflow-hidden z-50">
+
+      <a href="./events.html"
+        class="block px-4 py-3 text-sm text-[#d8e6ff] hover:bg-[#152d49] transition">
+        Events
+      </a>
+
+      <a href="./create-event.html"
+        class="block px-4 py-3 text-sm text-[#d8e6ff] hover:bg-[#152d49] transition">
+        Create Event
+      </a>
+
+      <a href="./my_events.html"
+        class="block px-4 py-3 text-sm text-[#d8e6ff] hover:bg-[#152d49] transition">
+        My Events
+      </a>
+
     </div>
   </div>
+</div>
   <div class="flex items-center gap-4">
     <button onclick="logout()" class="cta-gradient px-5 py-2 rounded-lg font-['Inter'] font-medium tracking-tight text-sm text-on-primary active:scale-95 opacity-90 hover:opacity-100 transition-all">LOGOUT</button>
   </div>
 </nav>
 
-<main class="pt-16 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto pb-24">
+<main class="pt-16 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
+
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
     <!-- Left sidebar -->
@@ -493,6 +518,19 @@ function logout() {
   localStorage.clear()
   window.location.href = "./index.html";
 }
+
+function toggleMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.classList.toggle("hidden");
+  }
+
+  // close when clicking outside
+  document.addEventListener("click", function (e) {
+    const menu = document.getElementById("dropdownMenu");
+    if (!e.target.closest(".relative")) {
+      menu.classList.add("hidden");
+    }
+});
 </script>
 <script src="./js/auth-nav.js"></script>
 </body>
